@@ -1,3 +1,4 @@
+package main;
 
 import java.awt.Color;
 
@@ -7,11 +8,11 @@ public class Main {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
-        frame.setTitle("Map");
+        frame.setTitle("Game");
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.setBackground(Color.white);
-        GamePanel gp = new GamePanel();
+        GamePanel gp = new GamePanel(frame);
         frame.add(gp);
         frame.pack();
         gp.start();
