@@ -46,10 +46,10 @@ public class Player extends Entity{
                 direction = "right";
             }
             if(kh.aattackOnePressed == true){
-                shoot();
+                c.attackOne(); 
             }
             if(kh.aattackTwoPressed == true){
-                shoot();
+                c.attackTwo();
             }
         }
         if(pID==2 && isAlive==true){
@@ -70,41 +70,48 @@ public class Player extends Entity{
                 direction = "right";
             }
             if(kh.battackOnePressed == true){
-                shoot();
+                c.attackOne();
             }
             if(kh.battackTwoPressed == true){
-                shoot();
+                c.attackTwo();
             }
         }
         if(x > gp.width-gp.tileSize){
-            x = gp.width-gp.tileSize;
-        }
-        if(y > gp.height-gp.tileSize){
-            y = gp.height-gp.tileSize;
-        }
-        if(x < 0){
             x = 0;
         }
-        if(y < 0){
+        if(y > gp.height-gp.tileSize){
             y = 0;
+        }
+        if(x < 0){
+            x = gp.width-gp.tileSize;
+        }
+        if(y < 0){
+            y = gp.height-gp.tileSize;
         }
         if(c.getHP() <= 0){
             isAlive = false;
+        }
+        if(pID==1){
+            gp.healthpacks++;
+            if(gp.healthpacks >= 450){
+                gp.healthpacks = 0;
+                melee((int)(Math.random()*640), (int)(Math.random()*480), -60, gp.tileSize*2, gp.tileSize*2, 0, Color.green,999999);   
+            }
         }
     }
     public void draw(Graphics2D g){
         if(isAlive==true){
         if(pID==1){
-            g.setColor(Color.BLUE);
+            g.setColor(c.color);
         }
         if(pID==2){
-            g.setColor(Color.RED);
+            g.setColor(c.color);
         }
         g.fillRect(x, y, gp.tileSize, gp.tileSize);
         
         }
         else{
-            g.setColor(Color.gray);
+            g.setColor(Color.black);
         }
     }
     
@@ -132,9 +139,6 @@ public class Player extends Entity{
             if(kh.arightPressed == true){
                 p.x += speed;
             }
-            if(kh.arightPressed == false && kh.aleftPressed == false && kh.adownPressed == false && kh.aupPressed == false){
-                c.HP -= 1;
-            }
         }
         if(pID==2){
             if(kh.bupPressed == true){
@@ -149,26 +153,33 @@ public class Player extends Entity{
             if(kh.brightPressed == true){
                 p.x += speed;
             }
-            if(kh.brightPressed == false && kh.bleftPressed == false && kh.bdownPressed == false && kh.bupPressed == false){
-                c.HP -= 1;
-            }
         }
         if(!kh.brightPressed && !kh.bleftPressed && !kh.bdownPressed && !kh.bupPressed && !kh.arightPressed && !kh.aleftPressed && !kh.adownPressed && !kh.aupPressed){
             p.x += Math.random() * 10 - 5;
             p.y += Math.random() * 10 - 5;
         }
     }
-    public void shoot() {
-        projectiles.add(new Projectile(x, y, 8, direction, gp.tileSize, c.attackDMG));
+    public void shoot(int damage, int size, int speed, Color color, int lt) {
+        projectiles.add(new Projectile(x, y, speed, direction, size, damage, color, lt));
     }
+    public void shoot(int damage, int size, int speed, Color color, int lt, boolean homing, Player target) {
+        projectiles.add(new Projectile(x, y, speed, direction, size, damage, color, lt, homing, target));
+    }
+    public void melee(int x, int y, int damage, int vsize, int hsize, int speed, Color color, int lt) {
+        projectiles.add(new Projectile(x, y, speed, direction, vsize, hsize, damage, color, lt));
+    }
+    public void melee(int x, int y, int damage, int vsize, int hsize, int speed, Color color, int lt, boolean canBlock) {
+        projectiles.add(new Projectile(x, y, speed, direction, vsize, hsize, damage, color, lt, canBlock));
+    }
+    
     public boolean checkProjectileCollision(Projectile projectile) {
         boolean friendlyFire = true;
         for(Projectile x: projectiles){
-            if(x == projectile){
+            if( projectile.atkD > 0 && x == projectile){
                 friendlyFire = false;
             }
         }
-        return Math.abs(x - projectile.x) < projectile.size && Math.abs(y - projectile.y) < projectile.size && friendlyFire;
+        return Math.abs(x - projectile.x) < projectile.hsize && Math.abs(y - projectile.y) < projectile.size && friendlyFire;
     }
     public void takeDamage(int damage) {
         if (c.takeDamage(damage) <= 0) {

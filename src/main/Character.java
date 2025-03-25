@@ -1,22 +1,32 @@
 package main;
+import entity.Player;
+import java.awt.Color;
 public class Character{
-protected int player;
+protected Player player;
 protected int movespeed;
 protected int maxHP;
 public int HP;
 protected String name;
 public int attackDMG;
+public Color color;
 
-public Character(int player, int movespeed, int maxHP, int HP, String name, int attackDMG){
-    this.player = player;
+public Character(int movespeed, int maxHP, int HP, String name, int attackDMG, Color color){
     this.movespeed = movespeed;
     this.maxHP = maxHP;
     this.HP = HP;
     this.name = name;
     this.attackDMG = attackDMG;
+    this.color = color;
+
+}
+public void setPlayer(Player player){
+    this.player = player;
 }
 public int takeDamage(int damage){
     HP -= damage;
+    if(HP > maxHP){
+        HP = maxHP;
+    }
     return HP;
 }
 

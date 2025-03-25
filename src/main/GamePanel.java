@@ -17,8 +17,9 @@ public class GamePanel extends JPanel implements Runnable {
     final int maxRow = 30;
     public final int width = tileSize * maxCol;
     public final int height = tileSize * maxRow;
-    KeyHandler con = new KeyHandler();
-    int FPS = 60;
+    public KeyHandler con = new KeyHandler();
+    public int healthpacks = 0;
+    int FPS = 30;
     Thread thread;
     int p1x = 100;
     int p1y = 100;
@@ -29,10 +30,10 @@ public class GamePanel extends JPanel implements Runnable {
     int p2size = tileSize*3;
     int p2speed = 4;
     JFrame frame;
-    Character Tank1 = new Tank(1, 4, 200, 200, "Tank", 1, 0.5, 50, 50);
-    Character Ranger1 = new Ranger(2, 5, 100, 100, "Ranger", 2, 5);
-    Character Tank2 = new Tank(1, 4, 200, 200, "Tank", 1, 0.5, 50, 50);
-    Character Ranger2 = new Ranger(2, 5, 100, 100, "Ranger", 2, 5);
+    Character Tank1 = new Tank(4, 200, 200, "Tank", 30, Color.red, 0.5);
+    Character Ranger1 = new Ranger(5, 100, 100, "Ranger", 20, Color.red, 5);
+    Character Tank2 = new Tank(4, 200, 200, "Tank", 30, Color.blue, 0.5);
+    Character Ranger2 = new Ranger(5, 100, 100, "Ranger", 20,Color.blue, 5);
     Player p1 = new Player(p1x, p1y, p1speed, this, con, p1size, 1);
     Player p2 = new Player(p2x, p2y, p2speed, this, con, p2size, 2);
     public GamePanel(JFrame frame){
@@ -51,10 +52,12 @@ public class GamePanel extends JPanel implements Runnable {
             String pChoice = scanner.nextLine();
             if (pChoice.equalsIgnoreCase("Tank")) {
                 p1.setCharacter(Tank1);
+                Tank1.setPlayer(p1);
                 PlayerDeciding = 2;
             } 
             else if (pChoice.equalsIgnoreCase("Ranger")) {
                 p1.setCharacter(Ranger1);
+                Ranger1.setPlayer(p1);
                 PlayerDeciding = 2;
             }
         }
@@ -63,10 +66,12 @@ public class GamePanel extends JPanel implements Runnable {
             String pChoice = scanner.nextLine();
             if (pChoice.equalsIgnoreCase("Tank")) {
                 p2.setCharacter(Tank2);
+                Tank2.setPlayer(p2);
                 PlayerDeciding = -1;
             } 
             else if (pChoice.equalsIgnoreCase("Ranger")) {
                 p2.setCharacter(Ranger2);
+                Ranger2.setPlayer(p2);
                 PlayerDeciding = -1;
             }
         }
@@ -97,9 +102,23 @@ public class GamePanel extends JPanel implements Runnable {
 
         for (Projectile projectile : p1.projectiles) {
             projectile.update();
-            if (p2.checkProjectileCollision(projectile)) {
+            if (p1.checkProjectileCollision(projectile)) {
+                p1.takeDamage(projectile.atkD);
+                projectilesToRemove.add(projectile);
+            }
+            else if (p2.checkProjectileCollision(projectile)) {
                 p2.takeDamage(projectile.atkD);
                 projectilesToRemove.add(projectile);
+            }
+            else if (projectile.x < 0 || projectile.x > width || projectile.y < 0 || projectile.y > height|| projectile.lt <= 0) {
+                projectilesToRemove.add(projectile);
+            }
+            else if (projectile.canBlock){
+                for (Projectile projectile2 : p2.projectiles) {
+                    if (projectile.checkCollision(projectile2)) {
+                        projectilesToRemove.add(projectile2);
+                    }
+                }
             }
         }
 
@@ -108,6 +127,16 @@ public class GamePanel extends JPanel implements Runnable {
             if (p1.checkProjectileCollision(projectile)) {
                 p1.takeDamage(projectile.atkD);
                 projectilesToRemove.add(projectile);
+            }
+            else if (projectile.x < 0 || projectile.x > width || projectile.y < 0 || projectile.y > height || projectile.lt <= 0 ) {
+                projectilesToRemove.add(projectile);
+            }
+            else if (projectile.canBlock){
+                for (Projectile projectile2 : p1.projectiles) {
+                    if (projectile.checkCollision(projectile2)) {
+                        projectilesToRemove.add(projectile2);
+                    }
+                }
             }
         }
 
@@ -124,14 +153,14 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D p1g = (Graphics2D)g;
         Graphics2D p2g = (Graphics2D)g;
-        p1.draw(p1g);
-        p2.draw(p2g);
         for (Projectile projectile : p1.projectiles) {
             projectile.draw(p1g);
         }
         for (Projectile projectile : p2.projectiles) {
             projectile.draw(p2g);
         }
+        p1.draw(p1g);
+        p2.draw(p2g);
         p1g.dispose();
         p2g.dispose();
     }   

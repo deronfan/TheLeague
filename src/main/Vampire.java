@@ -1,17 +1,26 @@
 package main;
+import java.awt.Color;
 public class Vampire extends Character{
     
-private int leachnum;
+private int leechnum;
+private int range;
+private long lastShootTime;
+private long shootCooldown;
 
-public Vampire(int player, int movespeed, int maxHP, int HP, String name, int attackDMG, int leachnum){
-    super(player, movespeed, maxHP, HP, name, attackDMG);
-    this.leachnum = leachnum;
+public Vampire(int movespeed, int maxHP, int HP, String name, int attackDMG, Color color, int range, int leachnum){
+    super(movespeed, maxHP, HP, name, attackDMG, color);
+    this.leechnum = 10;
+    this.range = range;
+    this.shootCooldown = 300;
+    this.lastShootTime = 0;
 }
-public void leech(){
+public void attackOne(){ //leech
     System.out.println("leech!");
 }
 
-public void stealth(){
+public void attackTwo(){ 
     System.out.println("stealth");
 }
 }
+
+
