@@ -9,6 +9,8 @@ public int HP;
 protected String name;
 public int attackDMG;
 public Color color;
+public int shotsAmount;
+public int shotsHit;
 
 public Character(int movespeed, int maxHP, int HP, String name, int attackDMG, Color color){
     this.movespeed = movespeed;
@@ -46,5 +48,6 @@ System.out.println("Attack Uno");
 public void attackTwo(){
     System.out.println("Attack Dos");
 }
-
+public void update(){
+}
 }

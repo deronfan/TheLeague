@@ -9,16 +9,18 @@ private boolean isBlocking;
 private long lastShootTime;
 private long shootCooldown;
 private Color norm;
+private int block;
 
 public Tank(int movespeed, int maxHP, int HP, String name, int attackDMG, Color color, double defense){
     super(movespeed, maxHP, HP, name, attackDMG, color);
     this.defense = defense;
-    this.blockCooldown = 50000;
+    this.blockCooldown = 10000;
     this.lastBlockTime = 0;
     this.isBlocking = false;
     this.shootCooldown = 300;
     this.lastShootTime = 0;
     norm = color;
+    block = 0;
 }
 public int takeDamage(int damage){
     if(damage <= 0)
@@ -30,8 +32,6 @@ public int takeDamage(int damage){
         return HP;
     }
     if(isBlocking){
-        isBlocking = false;
-        color = norm;
         return HP;
     }
     HP -= (int)(damage*defense);
@@ -48,7 +48,7 @@ public void attackOne(){ //Stab
         if(player.pID == 2){
             player.melee(player.x-player.gp.tileSize,player.y-player.gp.tileSize,attackDMG, player.gp.tileSize*3, player.gp.tileSize*3, 2, Color.cyan, 2, true);
         }
-        
+        shotsAmount++;
     }
 }
 
@@ -57,8 +57,18 @@ public void attackTwo(){ //Block
     if (currentTime - lastBlockTime >= blockCooldown) {
         isBlocking = true;
         lastBlockTime = currentTime;
+        block = 60;
         color = Color.yellow;
     }
 }
 
+public void update(){
+    if(block > 0){
+        block--;
+    }
+    if(block <= 0){
+        isBlocking = false;
+        color = norm;
+    }
+}
 }

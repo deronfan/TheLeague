@@ -1,10 +1,8 @@
 package entity;
-import entity.Projectile;
 import main.GamePanel;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
-
 import main.KeyHandler;
 import main.Character;
 public class Player extends Entity{
@@ -28,6 +26,9 @@ public class Player extends Entity{
         }
     }
     public void update(){
+        if(speed != c.getMovespeed()){
+            speed = c.getMovespeed();
+        }
         if(pID==1 && isAlive==true){
             if(kh.aupPressed == true){
                 y -= speed;

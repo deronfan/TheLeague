@@ -3,23 +3,75 @@ import java.awt.Color;
 public class Vampire extends Character{
     
 private int leechnum;
-private int range;
+private int normLeech;
+private int normDMG;
+private int rageBonus;
 private long lastShootTime;
 private long shootCooldown;
+private int hitsProcessed;
+private int rage;
+private Color norm;
+private int normSpeed;
+private long lastRageTime;
+private long rageCooldown;
 
-public Vampire(int movespeed, int maxHP, int HP, String name, int attackDMG, Color color, int range, int leachnum){
+public Vampire(int movespeed, int maxHP, int HP, String name, int attackDMG, Color color, int leachnum){
     super(movespeed, maxHP, HP, name, attackDMG, color);
-    this.leechnum = 10;
-    this.range = range;
+    this.leechnum = leachnum;
     this.shootCooldown = 300;
     this.lastShootTime = 0;
+    rage = 0;
+    lastRageTime = 0;
+    rageCooldown = 10000;
+    normLeech = leachnum;
+    normDMG = attackDMG;
+    norm = color;
+    normSpeed = movespeed;
+    rageBonus = 45;
 }
 public void attackOne(){ //leech
-    System.out.println("leech!");
+    long currentTime = System.currentTimeMillis();
+    if (currentTime - lastShootTime >= shootCooldown) {
+        lastShootTime = currentTime;
+        if(player.pID == 1){
+            player.melee(player.x-player.gp.tileSize, player.y-player.gp.tileSize,attackDMG, player.gp.tileSize*3, player.gp.tileSize*3, 2, Color.orange, 2, true);
+        }
+        if(player.pID == 2){
+            player.melee(player.x-player.gp.tileSize, player.y-player.gp.tileSize,attackDMG, player.gp.tileSize*3, player.gp.tileSize*3, 2, Color.cyan, 2, true);
+        }
+        shotsAmount++;
+    }
 }
 
 public void attackTwo(){ 
-    System.out.println("stealth");
+    long currentTime = System.currentTimeMillis();
+    if (currentTime - lastRageTime >= rageCooldown) {
+        rage = 150;
+        attackDMG = normDMG + rageBonus;
+        leechnum = normLeech + rageBonus;
+        movespeed = normSpeed + 1;
+        lastRageTime = currentTime;
+        color = Color.black;
+    }
+}
+
+public void update(){
+    if(hitsProcessed < shotsHit){
+        HP += leechnum;
+        if(HP > maxHP){
+            HP = maxHP;
+        }
+        hitsProcessed++;
+    }
+    if(rage > 0){
+        rage--;
+    }
+    if(rage <= 0){
+        attackDMG = normDMG;
+        leechnum = normLeech;
+        movespeed = normSpeed;
+        color = norm;
+    }
 }
 }
 

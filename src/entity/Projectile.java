@@ -13,8 +13,6 @@ public class Projectile extends Entity{
     public Player target;
     private int startlt;
     private int homespeed;
-    private int lxspeed;
-    private int lyspeed;
     public Projectile(int x, int y, int speed, String direction, int size, int atkD, Color color, int lt){
         super(x, y, speed);
         this.direction = direction;
@@ -98,9 +96,6 @@ public class Projectile extends Entity{
             double angle = Math.atan2(target.y - y, target.x - x);
             x += homespeed * Math.cos(angle);
             y += homespeed * Math.sin(angle);
-            
-            lxspeed = (int)(homespeed * Math.cos(angle));
-            lyspeed = (int)(homespeed * Math.sin(angle));
             }
         }
         if(x > width-16){
