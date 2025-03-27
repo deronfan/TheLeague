@@ -30,10 +30,10 @@ public void attackTwo(){
     long currentTime = System.currentTimeMillis();
     if (currentTime - lastWall >= wallCooldown) {
         if(player.pID == 1){
-            player.shoot(attackDMG*2, player.gp.tileSize, 1, Color.red, 450, true, player.gp.p2);
+            player.shoot(attackDMG*3, player.gp.tileSize, 1, Color.red, 300, true, player.gp.p2);
         }
         if(player.pID == 2){
-            player.shoot(attackDMG*2, player.gp.tileSize, 1, Color.blue, 450, true, player.gp.p1);
+            player.shoot(attackDMG*3, player.gp.tileSize, 1, Color.blue, 300, true, player.gp.p1);
         }
         shotsAmount++;
         lastWall = currentTime;

@@ -18,10 +18,10 @@ public void attackOne(){ //dark stab
     if (currentTime - lastShootTime >= shootCooldown) {
         lastShootTime = currentTime;
         if(player.pID == 1){
-            player.melee(player.x-player.gp.tileSize, player.y-player.gp.tileSize, attackDMG, player.gp.tileSize*4, player.gp.tileSize*4, 2, Color.MAGENTA, 2, true);
+            player.advmelee(attackDMG/2, player.gp.tileSize, player.gp.tileSize, 3, Color.darkGray,10, true, 4, 2);
         }
         if(player.pID == 2){
-            player.melee(player.x-player.gp.tileSize, player.y-player.gp.tileSize, attackDMG, player.gp.tileSize*4, player.gp.tileSize*4, 2, Color.DARK_GRAY, 2, true);
+            player.advmelee(attackDMG/2, player.gp.tileSize, player.gp.tileSize, 3, Color.lightGray, 10, true, 4, 2);
         }
         lastShootTime = currentTime;
         shotsAmount++;

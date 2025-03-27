@@ -13,6 +13,9 @@ public class Projectile extends Entity{
     public Player target;
     private int startlt;
     private int homespeed;
+    public boolean persistant;
+    public boolean canExplode;
+    public boolean rectangular;
     public Projectile(int x, int y, int speed, String direction, int size, int atkD, Color color, int lt){
         super(x, y, speed);
         this.direction = direction;
@@ -111,12 +114,22 @@ public class Projectile extends Entity{
             y = height-16;
         }
         lt--;
+        if(lt<=0){
+            if(canExplode){
+                explode();
+            }
+        }
     }
     
 
     public void draw(Graphics2D g) {
         g.setColor(color);
-        g.fillOval(x, y, size, hsize);
+        if(rectangular){
+            g.fillRect(x, y, size, hsize);
+        }
+        else{
+            g.fillOval(x, y, size, hsize);
+        }
     }
 
     public boolean checkCollision(Projectile other) {
@@ -124,6 +137,9 @@ public class Projectile extends Entity{
             return false;
         }
         return Math.abs(this.x - other.x) < this.size+8 && Math.abs(this.y - other.y) < this.hsize+8;
+    }
+    public void explode(){
+
     }
 
 }

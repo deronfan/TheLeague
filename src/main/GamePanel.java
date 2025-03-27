@@ -34,10 +34,12 @@ public class GamePanel extends JPanel implements Runnable {
     Character Ranger1 = new Ranger(5, 100, 100, "Ranger", 20, Color.red);
     Character Vampire1 = new Vampire(5, 100, 100, "Vampire", 35, Color.red, 10);
     Character DarkKnight1 = new NightKnight(5, 150, 150, "Dark Knight", 40, Color.red);
+    Character Rogue1 = new Rogue(7, 80, 80, "Rogue", 10, Color.red, 3);
     Character Tank2 = new Tank(4, 200, 200, "Tank", 30, Color.blue, 0.5);
     Character Ranger2 = new Ranger(5, 100, 100, "Ranger", 20,Color.blue);
     Character Vampire2 = new Vampire(5, 100, 100, "Vampire", 35, Color.blue, 10);
     Character DarkKnight2 = new NightKnight(5, 150, 150, "Dark Knight", 40, Color.blue);
+    Character Rogue2 = new Rogue(7, 80, 80, "Rogue", 10, Color.blue, 3);
     Player p1 = new Player(p1x, p1y, p1speed, this, con, p1size, 1);
     Player p2 = new Player(p2x, p2y, p2speed, this, con, p2size, 2);
     public GamePanel(JFrame frame){
@@ -52,7 +54,7 @@ public class GamePanel extends JPanel implements Runnable {
         Scanner scanner = new Scanner(System.in);
         int PlayerDeciding = 1;
         while(PlayerDeciding==1){
-            System.out.println("Player 1, choose your character (Tank/Ranger/Vampire/Dark Knight): ");
+            System.out.println("Player 1, choose your character (Tank/Ranger/Vampire/Dark Knight/Rogue): ");
             String pChoice = scanner.nextLine();
             if (pChoice.equalsIgnoreCase("Tank")) {
                 p1.setCharacter(Tank1);
@@ -74,9 +76,14 @@ public class GamePanel extends JPanel implements Runnable {
                 DarkKnight1.setPlayer(p1);
                 PlayerDeciding = 2;
             }
+            else if (pChoice.equalsIgnoreCase("Rogue")) {
+                p1.setCharacter(Rogue1);
+                Rogue1.setPlayer(p1);
+                PlayerDeciding = 2;
+            }
         }
         while(PlayerDeciding==2){
-            System.out.println("Player 2, choose your character (Tank/Ranger/Vampire/Dark Knight): ");
+            System.out.println("Player 2, choose your character (Tank/Ranger/Vampire/Dark Knight/Rogue): ");
             String pChoice = scanner.nextLine();
             if (pChoice.equalsIgnoreCase("Tank")) {
                 p2.setCharacter(Tank2);
@@ -96,6 +103,11 @@ public class GamePanel extends JPanel implements Runnable {
             else if (pChoice.equalsIgnoreCase("Dark Knight")) {
                 p2.setCharacter(DarkKnight2);
                 DarkKnight2.setPlayer(p2);
+                PlayerDeciding = -1;
+            }
+            else if (pChoice.equalsIgnoreCase("Rogue")) {
+                p2.setCharacter(Rogue2);
+                Rogue2.setPlayer(p2);
                 PlayerDeciding = -1;
             }
         }
@@ -130,7 +142,7 @@ public class GamePanel extends JPanel implements Runnable {
                 p1.takeDamage(projectile.atkD);
                 projectilesToRemove.add(projectile);
             }
-            else if (p2.checkProjectileCollision(projectile)) {
+            else if (p2.checkProjectileCollision(projectile) && !projectile.persistant) {
                 p2.takeDamage(projectile.atkD);
                 projectilesToRemove.add(projectile);
                 if(projectile.atkD > 0){
@@ -142,7 +154,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
             else if (projectile.canBlock){
                 for (Projectile projectile2 : p2.projectiles) {
-                    if (projectile.checkCollision(projectile2)) {
+                    if (projectile.checkCollision(projectile2) && !projectile.persistant) {
                         projectilesToRemove.add(projectile2);
                     }
                 }
@@ -151,7 +163,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         for (Projectile projectile : p2.projectiles) {
             projectile.update();
-            if (p1.checkProjectileCollision(projectile)) {
+            if (p1.checkProjectileCollision(projectile) && !projectile.persistant) {
                 p1.takeDamage(projectile.atkD);
                 projectilesToRemove.add(projectile);
                 if(projectile.atkD > 0){
@@ -163,7 +175,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
             else if (projectile.canBlock){
                 for (Projectile projectile2 : p1.projectiles) {
-                    if (projectile.checkCollision(projectile2)) {
+                    if (projectile.checkCollision(projectile2) && !projectile.persistant) {
                         projectilesToRemove.add(projectile2);
                     }
                 }
@@ -180,20 +192,78 @@ public class GamePanel extends JPanel implements Runnable {
         p1.c.update();
         p2.c.update();
         frame.setTitle("P1 HP:" + p1.c.getHP() + " P2 HP:" + p2.c.getHP());
-        if(p1.c.getHP() <= 0){
-            System.out.println("Player 2 wins!");
+        if(p1.c.getHP() <= 0 && p2.c.getHP() <= 0){
+            System.out.println("Game Tie");
             System.out.println("Player 2 shots hit: " + p2.c.shotsHit);
-            System.out.println("Player 2 Accuracy: " + (int)(100*p2.c.shotsHit/p2.c.shotsAmount) + "%");
+            if(p2.c.shotsAmount == 0){
+                System.out.println("Player 2 Accuracy: 0%");
+            }
+            else if(p2.c.shotsAmount < p2.c.shotsHit){
+                System.out.println("Player 2 Accuracy: 100%");
+            }
+            else{
+                System.out.println("Player 2 Accuracy: " + (int)(100*p2.c.shotsHit/p2.c.shotsAmount) + "%");
+            }
             System.out.println("Player 1 shots hit: " + p1.c.shotsHit);
-            System.out.println("Player 1 Accuracy: " + (int)(100*p1.c.shotsHit/p1.c.shotsAmount) + "%");
+            if(p1.c.shotsAmount == 0){
+                System.out.println("Player 1 Accuracy: 0%");
+            }
+            else if(p1.c.shotsAmount < p1.c.shotsHit){
+                System.out.println("Player 1 Accuracy: 100%");
+            }
+            else{
+                System.out.println("Player 1 Accuracy: " + (int)(100*p1.c.shotsHit/p1.c.shotsAmount) + "%");
+            }
             System.exit(0);
         }
-        if(p2.c.getHP() <= 0){
+        else if(p1.c.getHP() <= 0){
+            System.out.println("Player 2 wins!");
+            System.out.println("Player 2 shots hit: " + p2.c.shotsHit);
+            if(p2.c.shotsAmount == 0){
+                System.out.println("Player 2 Accuracy: 0%");
+            }
+            else if(p2.c.shotsAmount < p2.c.shotsHit){
+                System.out.println("Player 2 Accuracy: 100%");
+            }
+            else{
+                System.out.println("Player 2 Accuracy: " + (int)(100*p2.c.shotsHit/p2.c.shotsAmount) + "%");
+            }
+            System.out.println("Player 1 shots hit: " + p1.c.shotsHit);
+            if(p1.c.shotsAmount == 0){
+                System.out.println("Player 1 Accuracy: 0%");
+            }
+            else if(p1.c.shotsAmount < p1.c.shotsHit){
+                System.out.println("Player 1 Accuracy: 100%");
+            }
+            else{
+                System.out.println("Player 1 Accuracy: " + (int)(100*p1.c.shotsHit/p1.c.shotsAmount) + "%");
+            }
+            System.exit(0);
+            System.exit(0);
+        }
+        else if(p2.c.getHP() <= 0){
             System.out.println("Player 1 wins!");
             System.out.println("Player 2 shots hit: " + p2.c.shotsHit);
-            System.out.println("Player 2 Accuracy: " + (int)(100*p2.c.shotsHit/p2.c.shotsAmount) + "%");
+            if(p2.c.shotsAmount == 0){
+                System.out.println("Player 2 Accuracy: 0%");
+            }
+            else if(p2.c.shotsAmount < p2.c.shotsHit){
+                System.out.println("Player 2 Accuracy: 100%");
+            }
+            else{
+                System.out.println("Player 2 Accuracy: " + (int)(100*p2.c.shotsHit/p2.c.shotsAmount) + "%");
+            }
             System.out.println("Player 1 shots hit: " + p1.c.shotsHit);
-            System.out.println("Player 1 Accuracy: " + (int)(100*p1.c.shotsHit/p1.c.shotsAmount) + "%");
+            if(p1.c.shotsAmount == 0){
+                System.out.println("Player 1 Accuracy: 0%");
+            }
+            else if(p1.c.shotsAmount < p1.c.shotsHit){
+                System.out.println("Player 1 Accuracy: 100%");
+            }
+            else{
+                System.out.println("Player 1 Accuracy: " + (int)(100*p1.c.shotsHit/p1.c.shotsAmount) + "%");
+            }
+            System.exit(0);
             System.exit(0);
         }
     }

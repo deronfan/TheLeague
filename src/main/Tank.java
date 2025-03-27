@@ -43,10 +43,10 @@ public void attackOne(){ //Stab
     if (currentTime - lastShootTime >= shootCooldown) {
         lastShootTime = currentTime;
         if(player.pID == 1){
-            player.melee(player.x-player.gp.tileSize,player.y-player.gp.tileSize,attackDMG, player.gp.tileSize*3, player.gp.tileSize*3, 2, Color.orange, 2, true);
+            player.advmelee(attackDMG/3, (int)(player.gp.tileSize*1.5), (int)(player.gp.tileSize*1.5), 3, Color.orange,8, true, 8, 3);
         }
         if(player.pID == 2){
-            player.melee(player.x-player.gp.tileSize,player.y-player.gp.tileSize,attackDMG, player.gp.tileSize*3, player.gp.tileSize*3, 2, Color.cyan, 2, true);
+            player.advmelee(attackDMG/3, (int)(player.gp.tileSize*1.5), (int)(player.gp.tileSize*1.5), 3, Color.cyan, 8, true, 8, 3);
         }
         shotsAmount++;
     }

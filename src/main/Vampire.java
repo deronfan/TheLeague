@@ -34,10 +34,10 @@ public void attackOne(){ //leech
     if (currentTime - lastShootTime >= shootCooldown) {
         lastShootTime = currentTime;
         if(player.pID == 1){
-            player.melee(player.x-player.gp.tileSize, player.y-player.gp.tileSize,attackDMG, player.gp.tileSize*3, player.gp.tileSize*3, 2, Color.orange, 2, true);
+            player.melee(player.x-(int)(player.gp.tileSize*1.5), player.y-(int)(player.gp.tileSize*1.5),attackDMG, player.gp.tileSize*4, player.gp.tileSize*4, 6, Color.orange, 2, true);
         }
         if(player.pID == 2){
-            player.melee(player.x-player.gp.tileSize, player.y-player.gp.tileSize,attackDMG, player.gp.tileSize*3, player.gp.tileSize*3, 2, Color.cyan, 2, true);
+            player.melee(player.x-(int)(player.gp.tileSize*1.5), player.y-(int)(player.gp.tileSize*1.5),attackDMG, player.gp.tileSize*4, player.gp.tileSize*4, 6, Color.cyan, 2, true);
         }
         shotsAmount++;
     }

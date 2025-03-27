@@ -96,7 +96,7 @@ public class Player extends Entity{
             gp.healthpacks++;
             if(gp.healthpacks >= 450){
                 gp.healthpacks = 0;
-                melee((int)(Math.random()*640), (int)(Math.random()*480), -60, gp.tileSize*2, gp.tileSize*2, 0, Color.green,999999);   
+                projectiles.add(new Projectile((int)(Math.random()*640), (int)(Math.random()*480), 0, direction, gp.tileSize*2, gp.tileSize*2, -50, Color.green, 16000));
             }
         }
     }
@@ -171,6 +171,28 @@ public class Player extends Entity{
     }
     public void melee(int x, int y, int damage, int vsize, int hsize, int speed, Color color, int lt, boolean canBlock) {
         projectiles.add(new Projectile(x, y, speed, direction, vsize, hsize, damage, color, lt, canBlock));
+    }
+    public void advmelee(int damage, int vsize, int hsize, int speed, Color color, int lt, boolean canBlock, int length, int space) {
+        if (direction.equals("up")) {
+            for (int i = 0; i < length; i++) {
+                projectiles.add(new Projectile(x, y-space*i, speed, direction, vsize, hsize, damage, color, lt, canBlock));
+            }
+        }
+        if (direction.equals("down")) {
+            for (int i = 0; i < length; i++) {
+                projectiles.add(new Projectile(x, y+space*i, speed, direction, vsize, hsize, damage, color, lt, canBlock));
+            }
+        }
+        if (direction.equals("left")) {
+            for (int i = 0; i < length; i++) {
+                projectiles.add(new Projectile(x-space*i, y, speed, direction, vsize, hsize, damage, color, lt, canBlock));
+            }
+        }
+        if (direction.equals("right")) {
+            for (int i = 0; i < length; i++) {
+                projectiles.add(new Projectile(x+space*i, y, speed, direction, vsize, hsize, damage, color, lt, canBlock));
+            }
+        }
     }
     
     public boolean checkProjectileCollision(Projectile projectile) {
