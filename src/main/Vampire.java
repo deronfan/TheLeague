@@ -56,6 +56,7 @@ public void attackTwo(){
 }
 
 public void update(){
+    stunnedCheck();
     if(hitsProcessed < shotsHit){
         HP += leechnum;
         if(HP > maxHP){

@@ -21,6 +21,7 @@ public Tank(int movespeed, int maxHP, int HP, String name, int attackDMG, Color 
     this.lastShootTime = 0;
     norm = color;
     block = 0;
+    stunAmount = 30;
 }
 public int takeDamage(int damage){
     if(damage <= 0)
@@ -63,6 +64,7 @@ public void attackTwo(){ //Block
 }
 
 public void update(){
+    stunnedCheck();
     if(block > 0){
         block--;
     }

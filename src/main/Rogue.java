@@ -29,6 +29,9 @@ public int takeDamage(int damage){
         return HP;
     }
     HP -= damage;
+    if(HP > maxHP){
+        HP = maxHP;
+    }
     return HP;
 }
 public void attackOne(){ //dagger throw
@@ -54,6 +57,7 @@ public void attackTwo(){ //roll
     }
 }
 public void update(){
+    stunnedCheck();
     if(rollPhase > 0){
         rollPhase--;
     }

@@ -96,7 +96,7 @@ public class Player extends Entity{
             gp.healthpacks++;
             if(gp.healthpacks >= 450){
                 gp.healthpacks = 0;
-                projectiles.add(new Projectile((int)(Math.random()*640), (int)(Math.random()*480), 0, direction, gp.tileSize*2, gp.tileSize*2, -50, Color.green, 16000));
+                projectiles.add(new Projectile((int)(Math.random()*920+20), (int)(Math.random()*520+20), 0, direction, gp.tileSize*2, -50, Color.green, 16000));
             }
         }
     }
@@ -165,6 +165,12 @@ public class Player extends Entity{
     }
     public void shoot(int damage, int size, int speed, Color color, int lt, boolean homing, Player target) {
         projectiles.add(new Projectile(x, y, speed, direction, size, damage, color, lt, homing, target));
+    }
+    public void shoot(int damage, int size, int speed, Color color, int lt, boolean homing, Player target, int x, int y) {
+        projectiles.add(new Projectile(x, y, speed, "up", size, damage, color, lt, homing, target));
+        projectiles.add(new Projectile(x, y, speed, "down", size, damage, color, lt, homing, target));
+        projectiles.add(new Projectile(x, y, speed, "left", size, damage, color, lt, homing, target));
+        projectiles.add(new Projectile(x, y, speed, "right", size, damage, color, lt, homing, target));
     }
     public void melee(int x, int y, int damage, int vsize, int hsize, int speed, Color color, int lt) {
         projectiles.add(new Projectile(x, y, speed, direction, vsize, hsize, damage, color, lt));

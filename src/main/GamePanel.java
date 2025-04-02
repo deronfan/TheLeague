@@ -13,20 +13,20 @@ public class GamePanel extends JPanel implements Runnable {
     final int btileSize = 8;
     final int scale = 2;
     public final int tileSize = btileSize * scale;
-    final int maxCol = 40;
-    final int maxRow = 30;
+    final int maxCol = 60;
+    final int maxRow = 35;
     public final int width = tileSize * maxCol;
     public final int height = tileSize * maxRow;
     public KeyHandler con = new KeyHandler();
     public int healthpacks = 0;
     int FPS = 30;
     Thread thread;
-    int p1x = 100;
-    int p1y = 100;
+    int p1x = 200;
+    int p1y = 250;
     int p1size = tileSize*3;
     int p1speed = 4;
-    int p2x = 500;
-    int p2y = 100;
+    int p2x = 760;
+    int p2y = 250;
     int p2size = tileSize*3;
     int p2speed = 4;
     JFrame frame;
@@ -35,11 +35,13 @@ public class GamePanel extends JPanel implements Runnable {
     Character Vampire1 = new Vampire(5, 100, 100, "Vampire", 35, Color.red, 10);
     Character DarkKnight1 = new NightKnight(5, 150, 150, "Dark Knight", 40, Color.red);
     Character Rogue1 = new Rogue(7, 80, 80, "Rogue", 10, Color.red, 3);
+    Character Engineer1 = new Engineer(5, 100, 100, "Engineer", 5, Color.red);
     Character Tank2 = new Tank(4, 200, 200, "Tank", 30, Color.blue, 0.5);
     Character Ranger2 = new Ranger(5, 100, 100, "Ranger", 20,Color.blue);
     Character Vampire2 = new Vampire(5, 100, 100, "Vampire", 35, Color.blue, 10);
     Character DarkKnight2 = new NightKnight(5, 150, 150, "Dark Knight", 40, Color.blue);
     Character Rogue2 = new Rogue(7, 80, 80, "Rogue", 10, Color.blue, 3);
+    Character Engineer2 = new Engineer(5, 100, 100, "Engineer", 5, Color.blue);
     Player p1 = new Player(p1x, p1y, p1speed, this, con, p1size, 1);
     Player p2 = new Player(p2x, p2y, p2speed, this, con, p2size, 2);
     public GamePanel(JFrame frame){
@@ -54,7 +56,7 @@ public class GamePanel extends JPanel implements Runnable {
         Scanner scanner = new Scanner(System.in);
         int PlayerDeciding = 1;
         while(PlayerDeciding==1){
-            System.out.println("Player 1, choose your character (Tank/Ranger/Vampire/Dark Knight/Rogue): ");
+            System.out.println("Player 1, choose your character (Tank/Ranger/Vampire/Dark Knight/Rogue/Engineer): ");
             String pChoice = scanner.nextLine();
             if (pChoice.equalsIgnoreCase("Tank")) {
                 p1.setCharacter(Tank1);
@@ -81,9 +83,17 @@ public class GamePanel extends JPanel implements Runnable {
                 Rogue1.setPlayer(p1);
                 PlayerDeciding = 2;
             }
+            else if (pChoice.equalsIgnoreCase("Engineer")) {
+                p1.setCharacter(Engineer1);
+                Engineer1.setPlayer(p1);
+                PlayerDeciding = 2;
+            }
+            else{
+                System.out.println("Invalid choice, please try again.");
+            }
         }
         while(PlayerDeciding==2){
-            System.out.println("Player 2, choose your character (Tank/Ranger/Vampire/Dark Knight/Rogue): ");
+            System.out.println("Player 2, choose your character (Tank/Ranger/Vampire/Dark Knight/Rogue/Engineer): ");
             String pChoice = scanner.nextLine();
             if (pChoice.equalsIgnoreCase("Tank")) {
                 p2.setCharacter(Tank2);
@@ -109,6 +119,14 @@ public class GamePanel extends JPanel implements Runnable {
                 p2.setCharacter(Rogue2);
                 Rogue2.setPlayer(p2);
                 PlayerDeciding = -1;
+            }
+            else if( pChoice.equalsIgnoreCase("Engineer")) {
+                p2.setCharacter(Engineer2);
+                Engineer2.setPlayer(p2);
+                PlayerDeciding = -1;
+            }
+            else{
+                System.out.println("Invalid choice, please try again.");
             }
         }
         scanner.close();

@@ -27,9 +27,10 @@ public class Projectile extends Entity{
         startlt = lt;
         homing = false;
         canBlock = false;
-        width = 640;
-        height = 480;
+        width = 960;
+        height = 560;
     }
+    
     public Projectile(int x, int y, int speed, String direction, int size, int atkD, Color color, int lt, boolean homing, Player target){
         super(x, y, speed);
         this.direction = direction;
@@ -43,8 +44,8 @@ public class Projectile extends Entity{
         this.homespeed = speed;
         this.target = target;
         canBlock = false;
-        width = 640;
-        height = 480;
+        width = 960;
+        height = 560;
     }
     public Projectile(int x, int y, int speed, String direction, int vsize, int hsize, int atkD, Color color, int lt){
         super(x, y, speed);
@@ -57,8 +58,8 @@ public class Projectile extends Entity{
         this.lt = lt;
         homing = false;
         canBlock = false;
-        width = 640;
-        height = 480;
+        width = 960;
+        height = 560;
     }
 
     public Projectile(int x, int y, int speed, String direction, int vsize, int hsize, int atkD, Color color, int lt, boolean canBlock){
@@ -72,8 +73,8 @@ public class Projectile extends Entity{
         this.lt = lt;
         this.canBlock = canBlock;
         homing = false;
-        width = 640;
-        height = 640;
+        width = 960;
+        height = 560;
     }
     public void update() {
             switch (direction) {
