@@ -30,6 +30,7 @@ public class Player extends Entity{
             speed = c.getMovespeed();
         }
         if(pID==1 && isAlive==true){
+            //System.out.println("Player " + pID + " is Updating");
             if(kh.aupPressed == true){
                 y -= speed;
                 direction = "up";
@@ -54,6 +55,7 @@ public class Player extends Entity{
             }
         }
         if(pID==2 && isAlive==true){
+            //System.out.println("Player " + pID + " is Updating");
             if(kh.bupPressed == true){
                 y -= speed;
                 direction = "up";

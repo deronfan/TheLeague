@@ -1,14 +1,14 @@
 package main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-public class KeyHandler implements KeyListener{
+public class KeyHandler implements KeyListener {
+    @Override
+    public void keyTyped(KeyEvent e) {}
     public boolean aupPressed = false, adownPressed = false, aleftPressed = false, arightPressed = false, bupPressed = false, bdownPressed = false, bleftPressed = false, brightPressed = false;
     public boolean aattackOnePressed = false, aattackTwoPressed = false, battackOnePressed = false, battackTwoPressed = false;
     @Override
-    public void keyTyped(KeyEvent e) {
-    }
-    @Override
     public void keyPressed(KeyEvent e) {
+        System.out.println("Key Pressed: " + e.getKeyCode());
         int code = e.getKeyCode();
         if(code == KeyEvent.VK_Q){
             aattackOnePressed = true;

@@ -1,14 +1,14 @@
 package main;
+
 import entity.Player;
 import entity.Projectile;
-import javax.swing.JPanel;
-import javax.swing.JFrame;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Scanner;
+
 public class GamePanel extends JPanel implements Runnable {
     final int btileSize = 8;
     final int scale = 2;
@@ -23,11 +23,11 @@ public class GamePanel extends JPanel implements Runnable {
     Thread thread;
     int p1x = 200;
     int p1y = 250;
-    int p1size = tileSize*3;
+    int p1size = tileSize * 3;
     int p1speed = 4;
     int p2x = 760;
     int p2y = 250;
-    int p2size = tileSize*3;
+    int p2size = tileSize * 3;
     int p2speed = 4;
     JFrame frame;
     Character Tank1 = new Tank(4, 200, 200, "Tank", 45, Color.red, 0.5);
@@ -37,123 +37,99 @@ public class GamePanel extends JPanel implements Runnable {
     Character Rogue1 = new Rogue(7, 80, 80, "Rogue", 10, Color.red, 3);
     Character Engineer1 = new Engineer(5, 100, 100, "Engineer", 5, Color.red);
     Character Tank2 = new Tank(4, 200, 200, "Tank", 30, Color.blue, 0.5);
-    Character Ranger2 = new Ranger(5, 100, 100, "Ranger", 20,Color.blue);
+    Character Ranger2 = new Ranger(5, 100, 100, "Ranger", 20, Color.blue);
     Character Vampire2 = new Vampire(5, 100, 100, "Vampire", 35, Color.blue, 10);
     Character DarkKnight2 = new NightKnight(5, 150, 150, "Dark Knight", 40, Color.blue);
     Character Rogue2 = new Rogue(7, 80, 80, "Rogue", 10, Color.blue, 3);
     Character Engineer2 = new Engineer(5, 100, 100, "Engineer", 5, Color.blue);
     Player p1 = new Player(p1x, p1y, p1speed, this, con, p1size, 1);
     Player p2 = new Player(p2x, p2y, p2speed, this, con, p2size, 2);
-    public GamePanel(JFrame frame){
+
+    private int playerNumber = 1; // Track which player is selecting their character
+    private boolean characterSelectionComplete = false;
+
+    public GamePanel(JFrame frame) {
         this.setPreferredSize(new Dimension(width, height));
         this.setBackground(Color.gray);
         this.setDoubleBuffered(getFocusTraversalKeysEnabled());
         this.addKeyListener(con);
         this.setFocusable(true);
         this.frame = frame;
+
+        // Start character selection
+        showCharacterSelection();
     }
-    public void start() {
-        Scanner scanner = new Scanner(System.in);
-        int PlayerDeciding = 1;
-        while(PlayerDeciding==1){
-            System.out.println("Player 1, choose your character (Tank/Ranger/Vampire/Dark Knight/Rogue/Engineer): ");
-            String pChoice = scanner.nextLine();
-            if (pChoice.equalsIgnoreCase("Tank")) {
-                p1.setCharacter(Tank1);
-                Tank1.setPlayer(p1);
-                PlayerDeciding = 2;
-            } 
-            else if (pChoice.equalsIgnoreCase("Ranger")) {
-                p1.setCharacter(Ranger1);
-                Ranger1.setPlayer(p1);
-                PlayerDeciding = 2;
+
+    private void showCharacterSelection() {
+        this.setLayout(new GridLayout(3, 2)); // Grid layout for buttons
+        addCharacterButton("Tank", Tank1, Tank2);
+        addCharacterButton("Ranger", Ranger1, Ranger2);
+        addCharacterButton("Vampire", Vampire1, Vampire2);
+        addCharacterButton("Dark Knight", DarkKnight1, DarkKnight2);
+        addCharacterButton("Rogue", Rogue1, Rogue2);
+        addCharacterButton("Engineer", Engineer1, Engineer2);
+    }
+
+    private void addCharacterButton(String name, Character player1Character, Character player2Character) {
+        JButton button = new JButton(name);
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (playerNumber == 1) {
+                    p1.setCharacter(player1Character);
+                    player1Character.setPlayer(p1);
+                    playerNumber = 2;
+                    System.out.println("Player 1 selected: " + name);
+                } else if (playerNumber == 2) {
+                    p2.setCharacter(player2Character);
+                    player2Character.setPlayer(p2);
+                    characterSelectionComplete = true;
+                    System.out.println("Player 2 selected: " + name);
+                }
+
+                // Remove buttons after selection
+                if (characterSelectionComplete) {
+                    removeAll();
+                    setLayout(null); // Reset layout for gameplay
+                    revalidate();
+                    repaint();
+                    startGame();
+                }
             }
-            else if (pChoice.equalsIgnoreCase("Vampire")) {
-                p1.setCharacter(Vampire1);
-                Vampire1.setPlayer(p1);
-                PlayerDeciding = 2;
-            }
-            else if (pChoice.equalsIgnoreCase("Dark Knight")) {
-                p1.setCharacter(DarkKnight1);
-                DarkKnight1.setPlayer(p1);
-                PlayerDeciding = 2;
-            }
-            else if (pChoice.equalsIgnoreCase("Rogue")) {
-                p1.setCharacter(Rogue1);
-                Rogue1.setPlayer(p1);
-                PlayerDeciding = 2;
-            }
-            else if (pChoice.equalsIgnoreCase("Engineer")) {
-                p1.setCharacter(Engineer1);
-                Engineer1.setPlayer(p1);
-                PlayerDeciding = 2;
-            }
-            else{
-                System.out.println("Invalid choice, please try again.");
-            }
-        }
-        while(PlayerDeciding==2){
-            System.out.println("Player 2, choose your character (Tank/Ranger/Vampire/Dark Knight/Rogue/Engineer): ");
-            String pChoice = scanner.nextLine();
-            if (pChoice.equalsIgnoreCase("Tank")) {
-                p2.setCharacter(Tank2);
-                Tank2.setPlayer(p2);
-                PlayerDeciding = -1;
-            } 
-            else if (pChoice.equalsIgnoreCase("Ranger")) {
-                p2.setCharacter(Ranger2);
-                Ranger2.setPlayer(p2);
-                PlayerDeciding = -1;
-            }
-            else if (pChoice.equalsIgnoreCase("Vampire")) {
-                p2.setCharacter(Vampire2);
-                Vampire2.setPlayer(p2);
-                PlayerDeciding = -1;
-            }
-            else if (pChoice.equalsIgnoreCase("Dark Knight")) {
-                p2.setCharacter(DarkKnight2);
-                DarkKnight2.setPlayer(p2);
-                PlayerDeciding = -1;
-            }
-            else if (pChoice.equalsIgnoreCase("Rogue")) {
-                p2.setCharacter(Rogue2);
-                Rogue2.setPlayer(p2);
-                PlayerDeciding = -1;
-            }
-            else if( pChoice.equalsIgnoreCase("Engineer")) {
-                p2.setCharacter(Engineer2);
-                Engineer2.setPlayer(p2);
-                PlayerDeciding = -1;
-            }
-            else{
-                System.out.println("Invalid choice, please try again.");
-            }
-        }
-        scanner.close();
+        });
+        this.add(button);
+    }
+
+    private void startGame() {
+        System.out.println("Starting game...");
         thread = new Thread(this);
         thread.start();
+        this.requestFocusInWindow();
     }
-    public void run(){
+
+    public void run() {
+        this.setFocusable(true);
+        System.out.println("Game Started");
         double target = 1000000000 / FPS;
         double delta = 0;
         long now;
         long lastTime = System.nanoTime();
-        while(thread != null){
+        while (thread != null) {
             now = System.nanoTime();
             delta += (now - lastTime) / target;
             lastTime = now;
-            if(delta >= 1){
+            if (delta >= 1) {
                 update();
                 delta--;
             }
             repaint();
         }
     }
-    public void update(){
+
+    public void update() {
         p1.update();
         p2.update();
         ArrayList<Projectile> projectilesToRemove = new ArrayList<>();
-
         for (Projectile projectile : p1.projectiles) {
             projectile.update();
             if (p1.checkProjectileCollision(projectile)) {
@@ -285,19 +261,22 @@ public class GamePanel extends JPanel implements Runnable {
             System.exit(0);
         }
     }
-    public void paintComponent(Graphics g){
+
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D p1g = (Graphics2D)g;
-        Graphics2D p2g = (Graphics2D)g;
-        for (Projectile projectile : p1.projectiles) {
-            projectile.draw(p1g);
+        if (characterSelectionComplete) {
+            Graphics2D p1g = (Graphics2D) g;
+            Graphics2D p2g = (Graphics2D) g;
+            for (Projectile projectile : p1.projectiles) {
+                projectile.draw(p1g);
+            }
+            for (Projectile projectile : p2.projectiles) {
+                projectile.draw(p2g);
+            }
+            p1.draw(p1g);
+            p2.draw(p2g);
+            p1g.dispose();
+            p2g.dispose();
         }
-        for (Projectile projectile : p2.projectiles) {
-            projectile.draw(p2g);
-        }
-        p1.draw(p1g);
-        p2.draw(p2g);
-        p1g.dispose();
-        p2g.dispose();
-    }   
+    }
 }
