@@ -104,15 +104,41 @@ public class Player extends Entity{
     }
     public void draw(Graphics2D g){
         if(isAlive==true){
-        if(pID==1){
-            g.setColor(c.color);
-        }
-        if(pID==2){
-            g.setColor(c.color);
-        }
+        g.setColor(c.color);
+        g.setColor(c.color);
         g.fillRect(x, y, gp.tileSize, gp.tileSize);
-        
+        int rectWidth = gp.tileSize / 2; 
+        int rectHeight = gp.tileSize / 2;
+        int rectX = x;
+        int rectY = y;
+
+        switch (direction) {
+            case "up":
+                rectX = x + gp.tileSize / 4;
+                rectY = y - rectHeight; 
+                break;
+            case "down":
+                rectX = x + gp.tileSize / 4;
+                rectY = y + gp.tileSize;
+                break;
+            case "left":
+                rectX = x - rectWidth;
+                rectY = y + gp.tileSize / 4;
+                break;
+            case "right":
+                rectX = x + gp.tileSize;
+                rectY = y + gp.tileSize / 4;
+                break;
         }
+        if (pID == 1) {
+            g.setColor(Color.orange);
+        } else if (pID == 2) {
+            g.setColor(Color.cyan);
+        } else {
+            g.setColor(Color.black);
+        }
+        g.fillRect(rectX, rectY, rectWidth, rectHeight);
+        }    
         else{
             g.setColor(Color.black);
         }

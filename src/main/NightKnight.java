@@ -24,7 +24,7 @@ public void attackOne(){ //dark stab
             player.advmelee(attackDMG/2, player.gp.tileSize, player.gp.tileSize, 3, Color.lightGray, 10, true, 4, 2);
         }
         lastShootTime = currentTime;
-        shotsAmount++;
+        shotsAmount+=4;
     }
 }
 public void attackTwo(){ //dark ray

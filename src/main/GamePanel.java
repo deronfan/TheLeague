@@ -17,6 +17,8 @@ public class GamePanel extends JPanel implements Runnable {
     final int maxRow = 35;
     public final int width = tileSize * maxCol;
     public final int height = tileSize * maxRow;
+    boolean gameEnded = false;
+    String endScreenMessage = "";
     public KeyHandler con = new KeyHandler();
     public int healthpacks = 0;
     int FPS = 30;
@@ -61,6 +63,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private void showCharacterSelection() {
+        frame.setTitle("Player 1 Character Selection");
         this.setLayout(new GridLayout(3, 2)); // Grid layout for buttons
         addCharacterButton("Tank", Tank1, Tank2);
         addCharacterButton("Ranger", Ranger1, Ranger2);
@@ -80,11 +83,13 @@ public class GamePanel extends JPanel implements Runnable {
                     player1Character.setPlayer(p1);
                     playerNumber = 2;
                     System.out.println("Player 1 selected: " + name);
+                    frame.setTitle("Player 2 Character Selection");
                 } else if (playerNumber == 2) {
                     p2.setCharacter(player2Character);
                     player2Character.setPlayer(p2);
                     characterSelectionComplete = true;
                     System.out.println("Player 2 selected: " + name);
+                    frame.setTitle("");
                 }
 
                 // Remove buttons after selection
@@ -127,6 +132,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
+        if(!gameEnded){
         p1.update();
         p2.update();
         ArrayList<Projectile> projectilesToRemove = new ArrayList<>();
@@ -141,6 +147,19 @@ public class GamePanel extends JPanel implements Runnable {
                 projectilesToRemove.add(projectile);
                 if(projectile.atkD > 0){
                     p1.c.shotsHit++;
+                    int seed = (int)(Math.random()*20);
+                    if(seed == 0){
+                        frame.setTitle("Player 1's aim is insane!");
+                    }
+                    else if(seed == 1){
+                        frame.setTitle("Player 2 can not get a break today.");
+                    }
+                    else if(seed == 2){
+                        frame.setTitle("Player 2 is throwing!");
+                    }
+                    else if(seed == 3){
+                        frame.setTitle("Player 1 is going crazy.");
+                    }
                 }
             }
             else if (projectile.x < 0 || projectile.x > width || projectile.y < 0 || projectile.y > height|| projectile.lt <= 0) {
@@ -150,6 +169,7 @@ public class GamePanel extends JPanel implements Runnable {
                 for (Projectile projectile2 : p2.projectiles) {
                     if (projectile.checkCollision(projectile2) && !projectile.persistant) {
                         projectilesToRemove.add(projectile2);
+                        frame.setTitle("That was a CRAZY block by player 1!");
                     }
                 }
             }
@@ -162,6 +182,19 @@ public class GamePanel extends JPanel implements Runnable {
                 projectilesToRemove.add(projectile);
                 if(projectile.atkD > 0){
                     p2.c.shotsHit++;
+                    int seed = (int)(Math.random()*20);
+                    if(seed == 0){
+                        frame.setTitle("Player 2 with the sick shot!");
+                    }
+                    else if(seed == 1){
+                        frame.setTitle("And player 2 with the snipe");
+                    }
+                    else if(seed == 2){
+                        frame.setTitle("Player 1 is throwing!");
+                    }
+                    else if(seed == 3){
+                        frame.setTitle("Player 1 keeps eating his attacks!");
+                    }
                 }
             }
             else if (projectile.x < 0 || projectile.x > width || projectile.y < 0 || projectile.y > height || projectile.lt <= 0 ) {
@@ -171,6 +204,7 @@ public class GamePanel extends JPanel implements Runnable {
                 for (Projectile projectile2 : p1.projectiles) {
                     if (projectile.checkCollision(projectile2) && !projectile.persistant) {
                         projectilesToRemove.add(projectile2);
+                        frame.setTitle("That was a CRAZY block by player 2!");
                     }
                 }
             }
@@ -185,86 +219,108 @@ public class GamePanel extends JPanel implements Runnable {
         }
         p1.c.update();
         p2.c.update();
-        frame.setTitle("P1 HP:" + p1.c.getHP() + " P2 HP:" + p2.c.getHP());
-        if(p1.c.getHP() <= 0 && p2.c.getHP() <= 0){
-            System.out.println("Game Tie");
-            System.out.println("Player 2 shots hit: " + p2.c.shotsHit);
-            if(p2.c.shotsAmount == 0){
-                System.out.println("Player 2 Accuracy: 0%");
-            }
-            else if(p2.c.shotsAmount < p2.c.shotsHit){
-                System.out.println("Player 2 Accuracy: 100%");
-            }
-            else{
-                System.out.println("Player 2 Accuracy: " + (int)(100*p2.c.shotsHit/p2.c.shotsAmount) + "%");
-            }
-            System.out.println("Player 1 shots hit: " + p1.c.shotsHit);
-            if(p1.c.shotsAmount == 0){
-                System.out.println("Player 1 Accuracy: 0%");
-            }
-            else if(p1.c.shotsAmount < p1.c.shotsHit){
-                System.out.println("Player 1 Accuracy: 100%");
-            }
-            else{
-                System.out.println("Player 1 Accuracy: " + (int)(100*p1.c.shotsHit/p1.c.shotsAmount) + "%");
-            }
-            System.exit(0);
         }
-        else if(p1.c.getHP() <= 0){
-            System.out.println("Player 2 wins!");
-            System.out.println("Player 2 shots hit: " + p2.c.shotsHit);
-            if(p2.c.shotsAmount == 0){
-                System.out.println("Player 2 Accuracy: 0%");
-            }
-            else if(p2.c.shotsAmount < p2.c.shotsHit){
-                System.out.println("Player 2 Accuracy: 100%");
-            }
-            else{
-                System.out.println("Player 2 Accuracy: " + (int)(100*p2.c.shotsHit/p2.c.shotsAmount) + "%");
-            }
-            System.out.println("Player 1 shots hit: " + p1.c.shotsHit);
-            if(p1.c.shotsAmount == 0){
-                System.out.println("Player 1 Accuracy: 0%");
-            }
-            else if(p1.c.shotsAmount < p1.c.shotsHit){
-                System.out.println("Player 1 Accuracy: 100%");
-            }
-            else{
-                System.out.println("Player 1 Accuracy: " + (int)(100*p1.c.shotsHit/p1.c.shotsAmount) + "%");
-            }
-            System.exit(0);
-            System.exit(0);
+        if (p1.c.getHP() <= 0 && p2.c.getHP() <= 0) {
+            frame.setTitle("and this is a tie!");
+            endScreenMessage = "Game Tie\n" + getPlayerStats();
+            gameEnded = true;
+        } else if (p1.c.getHP() <= 0) {
+            frame.setTitle("AND THE CROWD GOES WILD FOR PLAYER 2");
+            endScreenMessage = "Player 2 Wins!\n" + getPlayerStats();
+            gameEnded = true;
+        } else if (p2.c.getHP() <= 0) {
+            frame.setTitle("Another FREE win for player 1");
+            endScreenMessage = "Player 1 Wins!\n" + getPlayerStats();
+            gameEnded = true;
         }
-        else if(p2.c.getHP() <= 0){
-            System.out.println("Player 1 wins!");
-            System.out.println("Player 2 shots hit: " + p2.c.shotsHit);
-            if(p2.c.shotsAmount == 0){
-                System.out.println("Player 2 Accuracy: 0%");
-            }
-            else if(p2.c.shotsAmount < p2.c.shotsHit){
-                System.out.println("Player 2 Accuracy: 100%");
-            }
-            else{
-                System.out.println("Player 2 Accuracy: " + (int)(100*p2.c.shotsHit/p2.c.shotsAmount) + "%");
-            }
-            System.out.println("Player 1 shots hit: " + p1.c.shotsHit);
-            if(p1.c.shotsAmount == 0){
-                System.out.println("Player 1 Accuracy: 0%");
-            }
-            else if(p1.c.shotsAmount < p1.c.shotsHit){
-                System.out.println("Player 1 Accuracy: 100%");
-            }
-            else{
-                System.out.println("Player 1 Accuracy: " + (int)(100*p1.c.shotsHit/p1.c.shotsAmount) + "%");
-            }
-            System.exit(0);
-            System.exit(0);
-        }
+        // if(p1.c.getHP() <= 0 && p2.c.getHP() <= 0){
+        //     System.out.println("Game Tie");
+        //     System.out.println("Player 2 shots hit: " + p2.c.shotsHit);
+        //     if(p2.c.shotsAmount == 0){
+        //         System.out.println("Player 2 Accuracy: 0%");
+        //     }
+        //     else if(p2.c.shotsAmount < p2.c.shotsHit){
+        //         System.out.println("Player 2 Accuracy: 100%");
+        //     }
+        //     else{
+        //         System.out.println("Player 2 Accuracy: " + (int)(100*p2.c.shotsHit/p2.c.shotsAmount) + "%");
+        //     }
+        //     System.out.println("Player 1 shots hit: " + p1.c.shotsHit);
+        //     if(p1.c.shotsAmount == 0){
+        //         System.out.println("Player 1 Accuracy: 0%");
+        //     }
+        //     else if(p1.c.shotsAmount < p1.c.shotsHit){
+        //         System.out.println("Player 1 Accuracy: 100%");
+        //     }
+        //     else{
+        //         System.out.println("Player 1 Accuracy: " + (int)(100*p1.c.shotsHit/p1.c.shotsAmount) + "%");
+        //     }
+        //     System.exit(0);
+        // }
+        // else if(p1.c.getHP() <= 0){
+        //     System.out.println("Player 2 wins!");
+        //     System.out.println("Player 2 shots hit: " + p2.c.shotsHit);
+        //     if(p2.c.shotsAmount == 0){
+        //         System.out.println("Player 2 Accuracy: 0%");
+        //     }
+        //     else if(p2.c.shotsAmount < p2.c.shotsHit){
+        //         System.out.println("Player 2 Accuracy: 100%");
+        //     }
+        //     else{
+        //         System.out.println("Player 2 Accuracy: " + (int)(100*p2.c.shotsHit/p2.c.shotsAmount) + "%");
+        //     }
+        //     System.out.println("Player 1 shots hit: " + p1.c.shotsHit);
+        //     if(p1.c.shotsAmount == 0){
+        //         System.out.println("Player 1 Accuracy: 0%");
+        //     }
+        //     else if(p1.c.shotsAmount < p1.c.shotsHit){
+        //         System.out.println("Player 1 Accuracy: 100%");
+        //     }
+        //     else{
+        //         System.out.println("Player 1 Accuracy: " + (int)(100*p1.c.shotsHit/p1.c.shotsAmount) + "%");
+        //     }
+        //     System.exit(0);
+        // }
+        // else if(p2.c.getHP() <= 0){
+        //     System.out.println("Player 1 wins!");
+        //     System.out.println("Player 2 shots hit: " + p2.c.shotsHit);
+        //     if(p2.c.shotsAmount == 0){
+        //         System.out.println("Player 2 Accuracy: 0%");
+        //     }
+        //     else if(p2.c.shotsAmount < p2.c.shotsHit){
+        //         System.out.println("Player 2 Accuracy: 100%");
+        //     }
+        //     else{
+        //         System.out.println("Player 2 Accuracy: " + (int)(100*p2.c.shotsHit/p2.c.shotsAmount) + "%");
+        //     }
+        //     System.out.println("Player 1 shots hit: " + p1.c.shotsHit);
+        //     if(p1.c.shotsAmount == 0){
+        //         System.out.println("Player 1 Accuracy: 0%");
+        //     }
+        //     else if(p1.c.shotsAmount < p1.c.shotsHit){
+        //         System.out.println("Player 1 Accuracy: 100%");
+        //     }
+        //     else{
+        //         System.out.println("Player 1 Accuracy: " + (int)(100*p1.c.shotsHit/p1.c.shotsAmount) + "%");
+        //     }
+        //     System.exit(0);
+        // }
     }
-
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (characterSelectionComplete) {
+        if (gameEnded) {
+            g.setColor(Color.white);
+            g.fillRect(0, 0, width, height);
+            g.setColor(Color.black);
+            g.setFont(new Font("Arial", Font.BOLD, 36));
+            g.drawString("Game Over", width / 2 - 100, height / 4);
+            g.setFont(new Font("Arial", Font.PLAIN, 18));
+            int y = height / 3;
+            for (String line : endScreenMessage.split("\n")) {
+                g.drawString(line, width / 4, y);
+                y += 30;
+            }
+        } else if (characterSelectionComplete) {
             Graphics2D p1g = (Graphics2D) g;
             Graphics2D p2g = (Graphics2D) g;
             for (Projectile projectile : p1.projectiles) {
@@ -275,8 +331,27 @@ public class GamePanel extends JPanel implements Runnable {
             }
             p1.draw(p1g);
             p2.draw(p2g);
+            p1g.setColor(Color.BLACK);
+            p1g.setFont(new Font("Arial", Font.BOLD, 14));
+            p1g.drawString("P1 HP: " + p1.c.getHP() + "/" + p1.c.getMaxHP(), 40, height - 40);
+            p1g.drawString("P2 HP: " + p2.c.getHP() + "/" + p2.c.getMaxHP(), 800, height - 40);
             p1g.dispose();
             p2g.dispose();
+
         }
+    }
+    private String getPlayerStats() {
+        StringBuilder stats = new StringBuilder();
+        stats.append("Player 1 Stats:\n");
+        stats.append("Final HP: ").append(p1.c.HP).append("\n");
+        stats.append("Shots Hit: ").append(p1.c.shotsHit).append("\n");
+        stats.append("Shots Fired: ").append(p1.c.shotsAmount).append("\n");
+        stats.append("Accuracy: ").append(p1.c.shotsAmount == 0 ? "0%" : (int) (100.0 * p1.c.shotsHit / p1.c.shotsAmount) + "%").append("\n\n");
+        stats.append("Player 2 Stats:\n");
+        stats.append("Final HP: ").append(p2.c.HP).append("\n");
+        stats.append("Shots Hit: ").append(p2.c.shotsHit).append("\n");
+        stats.append("Shots Fired: ").append(p2.c.shotsAmount).append("\n");
+        stats.append("Accuracy: ").append(p2.c.shotsAmount == 0 ? "0%" : (int) (100.0 * p2.c.shotsHit / p2.c.shotsAmount) + "%").append("\n");
+        return stats.toString();
     }
 }

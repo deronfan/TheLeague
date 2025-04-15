@@ -8,7 +8,6 @@ public class KeyHandler implements KeyListener {
     public boolean aattackOnePressed = false, aattackTwoPressed = false, battackOnePressed = false, battackTwoPressed = false;
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println("Key Pressed: " + e.getKeyCode());
         int code = e.getKeyCode();
         if(code == KeyEvent.VK_Q){
             aattackOnePressed = true;

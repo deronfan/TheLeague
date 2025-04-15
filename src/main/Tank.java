@@ -49,7 +49,7 @@ public void attackOne(){ //Stab
         if(player.pID == 2){
             player.advmelee(attackDMG/3, (int)(player.gp.tileSize*1.5), (int)(player.gp.tileSize*1.5), 3, Color.cyan, 8, true, 8, 3);
         }
-        shotsAmount++;
+        shotsAmount+=8;
     }
 }
 
