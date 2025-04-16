@@ -18,29 +18,29 @@ public void attackOne(){ //dark stab
     if (currentTime - lastShootTime >= shootCooldown) {
         lastShootTime = currentTime;
         if(player.pID == 1){
-            player.advmelee(attackDMG/2, player.gp.tileSize, player.gp.tileSize, 3, Color.darkGray,10, true, 4, 2);
+            player.advmelee(attackDMG/2, player.gp.tileSize, player.gp.tileSize, 3, Color.darkGray,10, true, 10, 3);
         }
         if(player.pID == 2){
-            player.advmelee(attackDMG/2, player.gp.tileSize, player.gp.tileSize, 3, Color.lightGray, 10, true, 4, 2);
+            player.advmelee(attackDMG/2, player.gp.tileSize, player.gp.tileSize, 3, Color.lightGray, 10, true, 10, 3);
         }
         lastShootTime = currentTime;
-        shotsAmount+=4;
+        shotsAmount+=10;
     }
 }
 public void attackTwo(){ //dark ray
     long currentTime = System.currentTimeMillis();
     if (currentTime - lastRay >= rayCooldown) {
         if(player.pID == 1){
-            for(int i = 0; i < 10; i++){
-                player.shoot((int) (attackDMG * 0.15), player.gp.tileSize, 5+i, Color.ORANGE, 40);
+            for(int i = 0; i < 15; i++){
+                player.shoot((int) (attackDMG * 0.15), player.gp.tileSize, 8+(int)(i/2), Color.ORANGE, 70);
             }
         }
         if(player.pID == 2){
-            for(int i = 0; i < 10; i++){
-                player.shoot((int)(attackDMG * 0.15), player.gp.tileSize, 5+i, Color.DARK_GRAY, 40);
+            for(int i = 0; i < 15; i++){
+                player.shoot((int)(attackDMG * 0.15), player.gp.tileSize, 8+(int)(i/2), Color.DARK_GRAY, 70);
             }
         }
-        shotsAmount++;
+        shotsAmount+=15;
         lastRay = currentTime;
     }
 }

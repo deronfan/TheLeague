@@ -30,7 +30,23 @@ public class Projectile extends Entity{
         width = 960;
         height = 560;
     }
-    
+    public Projectile(int x, int y, int speed, String direction, int size, int atkD, Color color, int lt, boolean homing, Player target, boolean persistant){
+        super(x, y, speed);
+        this.direction = direction;
+        this.size = size;
+        this.hsize = size;
+        this.atkD = atkD;
+        this.color = color;
+        this.lt = lt;
+        startlt = lt;
+        this.homing = homing;
+        this.homespeed = speed;
+        this.target = target;
+        this.persistant = persistant;
+        canBlock = false;
+        width = 960;
+        height = 560;
+    }
     public Projectile(int x, int y, int speed, String direction, int size, int atkD, Color color, int lt, boolean homing, Player target){
         super(x, y, speed);
         this.direction = direction;
@@ -93,7 +109,7 @@ public class Projectile extends Entity{
             }
         if(homing) {
             if (target != null) {
-            if(lt < startlt-20 && homespeed < 6*speed){
+            if(lt < startlt-20 && (homespeed < 6*speed || speed == 0 && homespeed < 4)){
             startlt = lt;
             homespeed += 2; 
             }
@@ -134,7 +150,7 @@ public class Projectile extends Entity{
     }
 
     public boolean checkCollision(Projectile other) {
-        if (this == other || other.homing) {
+        if (this == other) {
             return false;
         }
         return Math.abs(this.x - other.x) < this.size+8 && Math.abs(this.y - other.y) < this.hsize+8;

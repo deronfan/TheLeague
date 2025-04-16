@@ -3,7 +3,7 @@ import entity.Player;
 import java.awt.Color;
 public class Character{
 protected Player player;
-protected int movespeed;
+public int movespeed;
 public int basespeed;
 protected int maxHP;
 public int HP;
@@ -72,6 +72,7 @@ public void stunnedCheck(){
         }
         if(stunTime == 0){
             isStunned = false;
+            movespeed = basespeed;
             if(player.pID == 1){
                 color = Color.red;
             }
@@ -79,9 +80,6 @@ public void stunnedCheck(){
                 color = Color.blue;
             }
         }
-    }
-    else{
-        movespeed = basespeed;
     }
 }
 public void stun(){

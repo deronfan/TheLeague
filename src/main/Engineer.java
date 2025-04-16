@@ -15,7 +15,7 @@ private int turretLS;
 
 public Engineer(int movespeed, int maxHP, int HP, String name, int attackDMG, Color color){
     super(movespeed, maxHP, HP, name, attackDMG, color);
-    this.shootCooldown = 150;
+    this.shootCooldown = 250;
     this.lastShootTime = 0;
     this.turretCooldown = 20000;
     this.lastTurret = 0;
@@ -56,13 +56,27 @@ public void update(){
         }
     }
     // System.out.println("hitsProcessed: " + hitsProcessed);
+    if(turretLT == turretLS){
+        if(player.pID == 1){
+            player.shoot(50, player.gp.tileSize*3, 0, Color.orange, turretLS, false, player.gp.p2, turretX-player.gp.tileSize, turretY-player.gp.tileSize, true);
+        }
+        if(player.pID == 2){
+            player.shoot(50, player.gp.tileSize*3, 0, Color.cyan, turretLS, false, player.gp.p1, turretX-player.gp.tileSize, turretY-player.gp.tileSize, true);
+        }
+    }
     if(turretLT > 0){
         turretLT--;
-        if(player.pID == 1 && turretLT%30 == 0){
-            player.shoot(10, player.gp.tileSize, 4, Color.orange, 120, false, player.gp.p2, turretX, turretY);
+        if(player.pID == 1 && turretLT%60 == 0){
+            player.shoot(5, player.gp.tileSize, 0, Color.orange, 120, true, player.gp.p2, turretX+5, turretY, false);
+            player.shoot(5, player.gp.tileSize, 0, Color.orange, 120, true, player.gp.p2, turretX-5, turretY, false);
+            player.shoot(5, player.gp.tileSize, 0, Color.orange, 120, true, player.gp.p2, turretX, turretY+5, false);
+            player.shoot(5, player.gp.tileSize, 0, Color.orange, 120, true, player.gp.p2, turretX, turretY-5, false);
         }
-        if(player.pID == 2 && turretLT%30 == 0){
-            player.shoot(10, player.gp.tileSize, 4, Color.cyan, 120, false, player.gp.p1, turretX, turretY);
+        if(player.pID == 2 && turretLT%60 == 0){
+            player.shoot(5, player.gp.tileSize, 0, Color.cyan, 120, true, player.gp.p1, turretX+5, turretY, false);
+            player.shoot(5, player.gp.tileSize, 0, Color.cyan, 120, true, player.gp.p1, turretX-5, turretY, false);
+            player.shoot(5, player.gp.tileSize, 0, Color.cyan, 120, true, player.gp.p1, turretX, turretY+5, false);
+            player.shoot(5, player.gp.tileSize, 0, Color.cyan, 120, true, player.gp.p1, turretX, turretY-5, false);
         }
         shotsAmount++;
     }

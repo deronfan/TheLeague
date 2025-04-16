@@ -14,6 +14,7 @@ private Color norm;
 private int normSpeed;
 private long lastRageTime;
 private long rageCooldown;
+private int tick;
 
 public Vampire(int movespeed, int maxHP, int HP, String name, int attackDMG, Color color, int leachnum){
     super(movespeed, maxHP, HP, name, attackDMG, color);
@@ -27,7 +28,7 @@ public Vampire(int movespeed, int maxHP, int HP, String name, int attackDMG, Col
     normDMG = attackDMG;
     norm = color;
     normSpeed = movespeed;
-    rageBonus = 45;
+    rageBonus = 20;
 }
 public void attackOne(){ //leech
     long currentTime = System.currentTimeMillis();
@@ -46,10 +47,12 @@ public void attackOne(){ //leech
 public void attackTwo(){ 
     long currentTime = System.currentTimeMillis();
     if (currentTime - lastRageTime >= rageCooldown) {
-        rage = 150;
+        player.gp.backgroundColor = Color.darkGray;
+        rage = 60;
+        player.gp.setFPS(20);
         attackDMG = normDMG + rageBonus;
-        leechnum = normLeech + rageBonus;
-        movespeed = normSpeed + 1;
+        leechnum = normLeech*2;
+        movespeed = (int)(normSpeed*2);
         lastRageTime = currentTime;
         color = Color.black;
     }
@@ -57,6 +60,7 @@ public void attackTwo(){
 
 public void update(){
     stunnedCheck();
+    tick++;
     if(hitsProcessed < shotsHit){
         HP += leechnum;
         if(HP > maxHP){
@@ -64,10 +68,15 @@ public void update(){
         }
         hitsProcessed++;
     }
-    if(rage > 0){
+    if(rage > -1){
         rage--;
     }
-    if(rage <= 0){
+    else if (tick%25==0){
+        HP--;
+    }
+    if(rage == 0){
+        player.gp.backgroundColor = Color.gray;
+        player.gp.FPS = 45;
         attackDMG = normDMG;
         leechnum = normLeech;
         movespeed = normSpeed;

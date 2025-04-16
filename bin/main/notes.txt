@@ -1,5 +1,0 @@
-Quality of life changes to add. 
-    info about each type
-    button instructions for new players
-    using another panel instead of console
-    add some polish to the project now

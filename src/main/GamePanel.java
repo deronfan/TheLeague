@@ -21,7 +21,8 @@ public class GamePanel extends JPanel implements Runnable {
     String endScreenMessage = "";
     public KeyHandler con = new KeyHandler();
     public int healthpacks = 0;
-    int FPS = 30;
+    public int FPS = 45;
+    public Color backgroundColor = Color.gray;
     Thread thread;
     int p1x = 200;
     int p1y = 250;
@@ -34,13 +35,13 @@ public class GamePanel extends JPanel implements Runnable {
     JFrame frame;
     Character Tank1 = new Tank(4, 200, 200, "Tank", 45, Color.red, 0.5);
     Character Ranger1 = new Ranger(5, 100, 100, "Ranger", 20, Color.red);
-    Character Vampire1 = new Vampire(5, 100, 100, "Vampire", 35, Color.red, 10);
+    Character Vampire1 = new Vampire(5, 100, 100, "Vampire", 15, Color.red, 10);
     Character DarkKnight1 = new NightKnight(5, 150, 150, "Dark Knight", 40, Color.red);
     Character Rogue1 = new Rogue(7, 80, 80, "Rogue", 10, Color.red, 3);
     Character Engineer1 = new Engineer(5, 100, 100, "Engineer", 5, Color.red);
     Character Tank2 = new Tank(4, 200, 200, "Tank", 30, Color.blue, 0.5);
     Character Ranger2 = new Ranger(5, 100, 100, "Ranger", 20, Color.blue);
-    Character Vampire2 = new Vampire(5, 100, 100, "Vampire", 35, Color.blue, 10);
+    Character Vampire2 = new Vampire(5, 100, 100, "Vampire", 15, Color.blue, 10);
     Character DarkKnight2 = new NightKnight(5, 150, 150, "Dark Knight", 40, Color.blue);
     Character Rogue2 = new Rogue(7, 80, 80, "Rogue", 10, Color.blue, 3);
     Character Engineer2 = new Engineer(5, 100, 100, "Engineer", 5, Color.blue);
@@ -52,7 +53,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public GamePanel(JFrame frame) {
         this.setPreferredSize(new Dimension(width, height));
-        this.setBackground(Color.gray);
+        this.setBackground(backgroundColor);
         this.setDoubleBuffered(getFocusTraversalKeysEnabled());
         this.addKeyListener(con);
         this.setFocusable(true);
@@ -102,6 +103,24 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }
         });
+        if(player1Character == Tank1 || player1Character == Tank2){
+            button.setToolTipText("<html>Primary Ability: Claymore - Huge Slow Melee Attack in the direction you are facing<br>Secondary Ability: Block - Block all incoming damage for a short period of time</html>");
+        }
+        else if(player1Character == Ranger1 || player1Character == Ranger2){
+            button.setToolTipText("<html>Primary Ability: Shoot - Shoot a projectile in the direction you are facing<br>Secondary Ability: Guided Bolt - Send forth a projectile that will follow the enemy</html>");
+        }
+        else if(player1Character == Vampire1 || player1Character == Vampire2){
+            button.setToolTipText("<html>Primary Ability: Bite - Deal damage in an area around you and heal for a portion of the damage dealt<br>Secondary Ability: Bloodlust - Gain a burst of speed and increased and damage for a short period of time while slowing down time.</html>");
+        }
+        else if(player1Character == DarkKnight1 || player1Character == DarkKnight2){
+            button.setToolTipText("<html>Primary Ability: Longsword - Fast Thin Melee Attack in the direction you are facing<br>Secondary Ability: Dark Blast - Shoot a lazer beam in the direction you are facing</html>");
+        }
+        else if(player1Character == Rogue1 || player1Character == Rogue2){
+            button.setToolTipText("<html>Primary Ability: Dagger - Quickly throws a dagger that does chip damage and homes in on the enemy<br>Secondary Ability: Dodge Roll - Gain a burst of speed and become invulnerable for a short period of time</html>");
+        }
+        else if(player1Character == Engineer1 || player1Character == Engineer2){
+            button.setToolTipText("<html>Primary Ability: Tazer - Shoot a projectile that will apply stacks of stun on an enemy<br>Secondary Ability: Turret - Place a turret that will shoot in all cardinal directions<br>Stun - Once enough stacks are applied, the enemy will be stunned for a short period of time</html>");
+        }
         this.add(button);
     }
 
@@ -121,10 +140,12 @@ public class GamePanel extends JPanel implements Runnable {
         long lastTime = System.nanoTime();
         while (thread != null) {
             now = System.nanoTime();
+            target = 1000000000 / FPS;
             delta += (now - lastTime) / target;
             lastTime = now;
             if (delta >= 1) {
                 update();
+                this.setBackground(backgroundColor);
                 delta--;
             }
             repaint();
@@ -142,9 +163,9 @@ public class GamePanel extends JPanel implements Runnable {
                 p1.takeDamage(projectile.atkD);
                 projectilesToRemove.add(projectile);
             }
-            else if (p2.checkProjectileCollision(projectile) && !projectile.persistant) {
+            else if (p2.checkProjectileCollision(projectile)) {
                 p2.takeDamage(projectile.atkD);
-                projectilesToRemove.add(projectile);
+                if(!projectile.persistant) projectilesToRemove.add(projectile);
                 if(projectile.atkD > 0){
                     p1.c.shotsHit++;
                     int seed = (int)(Math.random()*20);
@@ -167,19 +188,18 @@ public class GamePanel extends JPanel implements Runnable {
             }
             else if (projectile.canBlock){
                 for (Projectile projectile2 : p2.projectiles) {
-                    if (projectile.checkCollision(projectile2) && !projectile.persistant) {
+                    if (projectile.checkCollision(projectile2)) {
                         projectilesToRemove.add(projectile2);
                         frame.setTitle("That was a CRAZY block by player 1!");
                     }
                 }
             }
         }
-
         for (Projectile projectile : p2.projectiles) {
             projectile.update();
-            if (p1.checkProjectileCollision(projectile) && !projectile.persistant) {
+            if (p1.checkProjectileCollision(projectile)) {
                 p1.takeDamage(projectile.atkD);
-                projectilesToRemove.add(projectile);
+                if(!projectile.persistant) projectilesToRemove.add(projectile);
                 if(projectile.atkD > 0){
                     p2.c.shotsHit++;
                     int seed = (int)(Math.random()*20);
@@ -202,7 +222,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
             else if (projectile.canBlock){
                 for (Projectile projectile2 : p1.projectiles) {
-                    if (projectile.checkCollision(projectile2) && !projectile.persistant) {
+                    if (projectile.checkCollision(projectile2)) {
                         projectilesToRemove.add(projectile2);
                         frame.setTitle("That was a CRAZY block by player 2!");
                     }
@@ -353,5 +373,9 @@ public class GamePanel extends JPanel implements Runnable {
         stats.append("Shots Fired: ").append(p2.c.shotsAmount).append("\n");
         stats.append("Accuracy: ").append(p2.c.shotsAmount == 0 ? "0%" : (int) (100.0 * p2.c.shotsHit / p2.c.shotsAmount) + "%").append("\n");
         return stats.toString();
+    }
+    public void setFPS(int FPS) {
+        this.FPS = FPS;
+        System.out.println("FPS set to: " + FPS);
     }
 }

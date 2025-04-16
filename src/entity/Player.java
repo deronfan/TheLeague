@@ -194,11 +194,8 @@ public class Player extends Entity{
     public void shoot(int damage, int size, int speed, Color color, int lt, boolean homing, Player target) {
         projectiles.add(new Projectile(x, y, speed, direction, size, damage, color, lt, homing, target));
     }
-    public void shoot(int damage, int size, int speed, Color color, int lt, boolean homing, Player target, int x, int y) {
-        projectiles.add(new Projectile(x, y, speed, "up", size, damage, color, lt, homing, target));
-        projectiles.add(new Projectile(x, y, speed, "down", size, damage, color, lt, homing, target));
-        projectiles.add(new Projectile(x, y, speed, "left", size, damage, color, lt, homing, target));
-        projectiles.add(new Projectile(x, y, speed, "right", size, damage, color, lt, homing, target));
+    public void shoot(int damage, int size, int speed, Color color, int lt, boolean homing, Player target, int x, int y, boolean persistant) {
+        projectiles.add(new Projectile(x, y, speed, "", size, damage, color, lt, homing, target, persistant));
     }
     public void melee(int x, int y, int damage, int vsize, int hsize, int speed, Color color, int lt) {
         projectiles.add(new Projectile(x, y, speed, direction, vsize, hsize, damage, color, lt));
@@ -236,7 +233,7 @@ public class Player extends Entity{
                 friendlyFire = false;
             }
         }
-        return Math.abs(x - projectile.x) < projectile.hsize && Math.abs(y - projectile.y) < projectile.size && friendlyFire;
+        return !projectile.persistant && (Math.abs(x - projectile.x) < projectile.hsize && Math.abs(y - projectile.y) < projectile.size && friendlyFire);
     }
     public void takeDamage(int damage) {
         if (c.takeDamage(damage) <= 0) {
