@@ -33,20 +33,22 @@ public class GamePanel extends JPanel implements Runnable {
     int p2size = tileSize * 3;
     int p2speed = 4;
     JFrame frame;
-    Character Tank1 = new Tank(4, 200, 200, "Tank", 45, Color.red, 0.5);
-    Character Ranger1 = new Ranger(5, 100, 100, "Ranger", 20, Color.red);
-    Character Vampire1 = new Vampire(5, 100, 100, "Vampire", 15, Color.red, 10);
-    Character DarkKnight1 = new NightKnight(5, 150, 150, "Dark Knight", 40, Color.red);
-    Character Rogue1 = new Rogue(7, 80, 80, "Rogue", 10, Color.red, 3);
-    Character Engineer1 = new Engineer(5, 100, 100, "Engineer", 5, Color.red);
-    Character Tank2 = new Tank(4, 200, 200, "Tank", 30, Color.blue, 0.5);
-    Character Ranger2 = new Ranger(5, 100, 100, "Ranger", 20, Color.blue);
-    Character Vampire2 = new Vampire(5, 100, 100, "Vampire", 15, Color.blue, 10);
-    Character DarkKnight2 = new NightKnight(5, 150, 150, "Dark Knight", 40, Color.blue);
-    Character Rogue2 = new Rogue(7, 80, 80, "Rogue", 10, Color.blue, 3);
-    Character Engineer2 = new Engineer(5, 100, 100, "Engineer", 5, Color.blue);
-    Player p1 = new Player(p1x, p1y, p1speed, this, con, p1size, 1);
-    Player p2 = new Player(p2x, p2y, p2speed, this, con, p2size, 2);
+    Character Tank1 = new Tank(4, 500, 500, "Tank", 45, Color.red, 0.5);
+    Character Ranger1 = new Ranger(5, 200, 200, "Ranger", 20, Color.red);
+    Character Vampire1 = new Vampire(5, 180, 180, "Vampire", 15, Color.red, 10);
+    Character DarkKnight1 = new NightKnight(5, 300, 300, "Dark Knight", 40, Color.red);
+    Character Rogue1 = new Rogue(7, 150, 150, "Rogue", 10, Color.red, 3);
+    Character Pyro1 = new Pyro(5, 300, 300, "Pyro", 50, Color.red);
+    Character Engineer1 = new Engineer(5, 180, 180, "Engineer", 5, Color.red);
+    Character Tank2 = new Tank(4, 500, 500, "Tank", 30, Color.blue, 0.5);
+    Character Ranger2 = new Ranger(5, 200, 200, "Ranger", 20, Color.blue);
+    Character Vampire2 = new Vampire(5, 180, 180, "Vampire", 15, Color.blue, 10);
+    Character DarkKnight2 = new NightKnight(5, 300, 300, "Dark Knight", 40, Color.blue);
+    Character Rogue2 = new Rogue(7, 150, 150, "Rogue", 10, Color.blue, 3);
+    Character Engineer2 = new Engineer(5, 180, 180, "Engineer", 5, Color.blue);
+    Character Pyro2 = new Pyro(5, 300, 300, "Pyro", 50, Color.blue);
+    public Player p1 = new Player(p1x, p1y, p1speed, this, con, p1size, 1);
+    public Player p2 = new Player(p2x, p2y, p2speed, this, con, p2size, 2);
 
     private int playerNumber = 1; // Track which player is selecting their character
     private boolean characterSelectionComplete = false;
@@ -65,13 +67,18 @@ public class GamePanel extends JPanel implements Runnable {
 
     private void showCharacterSelection() {
         frame.setTitle("Player 1 Character Selection");
-        this.setLayout(new GridLayout(3, 2)); // Grid layout for buttons
+        this.setLayout(new GridLayout(3, 3)); // Grid layout for buttons
         addCharacterButton("Tank", Tank1, Tank2);
         addCharacterButton("Ranger", Ranger1, Ranger2);
         addCharacterButton("Vampire", Vampire1, Vampire2);
         addCharacterButton("Dark Knight", DarkKnight1, DarkKnight2);
+        JButton Helpful = new JButton();
+        Helpful.setText("<html>Player One uses WASD to move and Q and E for Primary and Secondary Abilities respectively.<br>Player Two uses IJKL to move and U and O for Primary and Secondary Abilities respectively.<br>You can hover over the character's button for a brief description of their abilities.</html>");
+        this.add(Helpful);
         addCharacterButton("Rogue", Rogue1, Rogue2);
         addCharacterButton("Engineer", Engineer1, Engineer2);
+        addCharacterButton("Pyro", Pyro1, Pyro2);
+        addCharacterButton("Coming Soon", Engineer1, Engineer2);
     }
 
     private void addCharacterButton(String name, Character player1Character, Character player2Character) {
@@ -121,6 +128,9 @@ public class GamePanel extends JPanel implements Runnable {
         else if(player1Character == Engineer1 || player1Character == Engineer2){
             button.setToolTipText("<html>Primary Ability: Tazer - Shoot a projectile that will apply stacks of stun on an enemy<br>Secondary Ability: Turret - Place a turret that will shoot in all cardinal directions<br>Stun - Once enough stacks are applied, the enemy will be stunned for a short period of time</html>");
         }
+        else if(player1Character == Pyro1 || player1Character == Pyro2){
+            button.setToolTipText("<html>Primary Ability: Flame Thrower - Shoot a stream that deals chip damage<br>Secondary Ability: Flame Pool - Charge up for a second and release a pool of fire</html>");
+        }
         this.add(button);
     }
 
@@ -165,7 +175,9 @@ public class GamePanel extends JPanel implements Runnable {
             }
             else if (p2.checkProjectileCollision(projectile)) {
                 p2.takeDamage(projectile.atkD);
-                if(!projectile.persistant) projectilesToRemove.add(projectile);
+                if(!projectile.persistant) {
+                    projectilesToRemove.add(projectile);
+                }
                 if(projectile.atkD > 0){
                     p1.c.shotsHit++;
                     int seed = (int)(Math.random()*20);
@@ -184,6 +196,9 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }
             else if (projectile.x < 0 || projectile.x > width || projectile.y < 0 || projectile.y > height|| projectile.lt <= 0) {
+                if(projectile.hasOnDeath){
+                    p1.shoot(20, tileSize, 5, Color.orange, 100);
+                }
                 projectilesToRemove.add(projectile);
             }
             else if (projectile.canBlock){
@@ -199,7 +214,9 @@ public class GamePanel extends JPanel implements Runnable {
             projectile.update();
             if (p1.checkProjectileCollision(projectile)) {
                 p1.takeDamage(projectile.atkD);
-                if(!projectile.persistant) projectilesToRemove.add(projectile);
+                if(!projectile.persistant){
+                    projectilesToRemove.add(projectile);
+                }
                 if(projectile.atkD > 0){
                     p2.c.shotsHit++;
                     int seed = (int)(Math.random()*20);
@@ -376,6 +393,5 @@ public class GamePanel extends JPanel implements Runnable {
     }
     public void setFPS(int FPS) {
         this.FPS = FPS;
-        System.out.println("FPS set to: " + FPS);
     }
 }

@@ -14,7 +14,7 @@ public class Projectile extends Entity{
     private int startlt;
     private int homespeed;
     public boolean persistant;
-    public boolean canExplode;
+    public boolean hasOnDeath;
     public boolean rectangular;
     public Projectile(int x, int y, int speed, String direction, int size, int atkD, Color color, int lt){
         super(x, y, speed);
@@ -77,7 +77,20 @@ public class Projectile extends Entity{
         width = 960;
         height = 560;
     }
-
+    public Projectile(int x, int y, int speed, String direction, int vsize, int hsize, int atkD, Color color, int lt, boolean hasOnDeath, Player target){
+        super(x, y, speed);
+        this.direction = direction;
+        this.size = vsize;
+        this.hsize = hsize;
+        startlt = lt;
+        this.atkD = atkD;
+        this.color = color;
+        this.lt = lt;
+        this.hasOnDeath = hasOnDeath;
+        this.target = target;
+        width = 960;
+        height = 560;
+    }
     public Projectile(int x, int y, int speed, String direction, int vsize, int hsize, int atkD, Color color, int lt, boolean canBlock){
         super(x, y, speed);
         this.direction = direction;
@@ -131,11 +144,6 @@ public class Projectile extends Entity{
             y = height-16;
         }
         lt--;
-        if(lt<=0){
-            if(canExplode){
-                explode();
-            }
-        }
     }
     
 
@@ -155,8 +163,4 @@ public class Projectile extends Entity{
         }
         return Math.abs(this.x - other.x) < this.size+8 && Math.abs(this.y - other.y) < this.hsize+8;
     }
-    public void explode(){
-
-    }
-
 }

@@ -18,6 +18,8 @@ public void attackOne(){ //shoot
     if (currentTime - lastShootTime >= shootCooldown) {
         if(player.pID == 1){
             player.shoot(attackDMG, player.gp.tileSize, 5, Color.orange, 100);
+            //player.shoot(attackDMG, player.gp.tileSize,  player.gp.tileSize, 5, Color.orange, 100, true, player);
+            //player.shoot(1, 64, 0, Color.orange, 1200, false, player.gp.p2, player.x, player.y, true);
         }
         if(player.pID == 2){
             player.shoot(attackDMG, player.gp.tileSize, 5, Color.cyan, 100);

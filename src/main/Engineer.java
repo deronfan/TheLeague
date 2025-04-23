@@ -21,7 +21,7 @@ public Engineer(int movespeed, int maxHP, int HP, String name, int attackDMG, Co
     this.lastTurret = 0;
     turretLS = 900;
 }
-public void attackOne(){ 
+public void attackOne(){ //taser
     long currentTime = System.currentTimeMillis();
     if (currentTime - lastShootTime >= shootCooldown) {
         if(player.pID == 1){
@@ -58,10 +58,10 @@ public void update(){
     // System.out.println("hitsProcessed: " + hitsProcessed);
     if(turretLT == turretLS){
         if(player.pID == 1){
-            player.shoot(50, player.gp.tileSize*3, 0, Color.orange, turretLS, false, player.gp.p2, turretX-player.gp.tileSize, turretY-player.gp.tileSize, true);
+            player.shoot(10, player.gp.tileSize*3, 0, Color.orange, turretLS, false, player.gp.p2, turretX-player.gp.tileSize, turretY-player.gp.tileSize, true);
         }
         if(player.pID == 2){
-            player.shoot(50, player.gp.tileSize*3, 0, Color.cyan, turretLS, false, player.gp.p1, turretX-player.gp.tileSize, turretY-player.gp.tileSize, true);
+            player.shoot(10, player.gp.tileSize*3, 0, Color.cyan, turretLS, false, player.gp.p1, turretX-player.gp.tileSize, turretY-player.gp.tileSize, true);
         }
     }
     if(turretLT > 0){

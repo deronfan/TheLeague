@@ -30,8 +30,8 @@ public class Main {
         System.out.println("Welcome to the League");
         System.out.println("You have the option between 6 seperate characters");
         System.out.println("All 6 characters have their own unique abilities");
-        System.out.println("Player one uses WASD to move and Q and E for Primary and Secondary Abilities respectively");
-        System.out.println("Player two uses IJKL to move and U and O for Primary and Secondary Abilities respectively");
+        System.out.println("Player One uses WASD to move and Q and E for Primary and Secondary Abilities respectively");
+        System.out.println("Player Two uses IJKL to move and U and O for Primary and Secondary Abilities respectively");
         System.out.println("Open up the public port and enjoy the game");
         }
 }

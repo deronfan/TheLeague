@@ -37,7 +37,7 @@ public void attackTwo(){ //dark ray
         }
         if(player.pID == 2){
             for(int i = 0; i < 15; i++){
-                player.shoot((int)(attackDMG * 0.15), player.gp.tileSize, 8+(int)(i/2), Color.DARK_GRAY, 70);
+                player.shoot((int)(attackDMG * 0.5), player.gp.tileSize, 8+(int)(i/2), Color.DARK_GRAY, 70);
             }
         }
         shotsAmount+=15;

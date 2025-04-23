@@ -69,9 +69,13 @@ public void update(){
         hitsProcessed++;
     }
     if(rage > -1){
+        if(rage> 0){
+            player.gp.setFPS(20);
+            player.gp.backgroundColor = Color.darkGray;
+        }
         rage--;
     }
-    else if (tick%25==0){
+    else if (tick%40==0){
         HP--;
     }
     if(rage == 0){

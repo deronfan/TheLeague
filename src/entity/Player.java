@@ -98,7 +98,7 @@ public class Player extends Entity{
             gp.healthpacks++;
             if(gp.healthpacks >= 450){
                 gp.healthpacks = 0;
-                projectiles.add(new Projectile((int)(Math.random()*920+20), (int)(Math.random()*520+20), 0, direction, gp.tileSize*2, -50, Color.green, 16000));
+                projectiles.add(new Projectile((int)(Math.random()*920+20), (int)(Math.random()*520+20), 0, direction, gp.tileSize*2, -50, Color.green, 1600));
             }
         }
     }
@@ -195,6 +195,7 @@ public class Player extends Entity{
         projectiles.add(new Projectile(x, y, speed, direction, size, damage, color, lt, homing, target));
     }
     public void shoot(int damage, int size, int speed, Color color, int lt, boolean homing, Player target, int x, int y, boolean persistant) {
+        System.out.println("Check 4");
         projectiles.add(new Projectile(x, y, speed, "", size, damage, color, lt, homing, target, persistant));
     }
     public void melee(int x, int y, int damage, int vsize, int hsize, int speed, Color color, int lt) {
@@ -202,6 +203,9 @@ public class Player extends Entity{
     }
     public void melee(int x, int y, int damage, int vsize, int hsize, int speed, Color color, int lt, boolean canBlock) {
         projectiles.add(new Projectile(x, y, speed, direction, vsize, hsize, damage, color, lt, canBlock));
+    }
+    public void shoot(int damage, int vsize, int hsize, int speed, Color color, int lt, boolean hasOnDeath, Player target) {
+        projectiles.add(new Projectile(x, y, speed, direction, vsize, hsize, damage, color, lt, hasOnDeath, target));
     }
     public void advmelee(int damage, int vsize, int hsize, int speed, Color color, int lt, boolean canBlock, int length, int space) {
         if (direction.equals("up")) {
@@ -233,7 +237,7 @@ public class Player extends Entity{
                 friendlyFire = false;
             }
         }
-        return !projectile.persistant && (Math.abs(x - projectile.x) < projectile.hsize && Math.abs(y - projectile.y) < projectile.size && friendlyFire);
+        return (Math.abs(x - projectile.x) < projectile.hsize && Math.abs(y - projectile.y) < projectile.size && friendlyFire);
     }
     public void takeDamage(int damage) {
         if (c.takeDamage(damage) <= 0) {
