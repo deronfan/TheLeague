@@ -125,6 +125,8 @@ public class Player extends Entity{
         int rectY = y;
         if (hasafterimage) {
             g.setColor(new Color(c.color.getRed(), c.color.getGreen(), c.color.getBlue(), 100)); // Faint version of the player's color
+            g.fillRect(pastX, pastY, gp.tileSize, gp.tileSize);
+            g.fillRect(pastX2, pastY2, gp.tileSize, gp.tileSize);
             g.fillRect(pastX3, pastY3, gp.tileSize, gp.tileSize);
         }
         switch (direction) {
