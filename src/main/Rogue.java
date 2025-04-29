@@ -52,6 +52,7 @@ public void attackTwo(){ //roll
         roll = 15;
         immune = true;
         movespeed = normSpeed + 10;
+        player.hasafterimage = true;
         color = Color.lightGray;
         rollNum--;
     }
@@ -68,10 +69,11 @@ public void update(){
     if(roll > 0){
         roll--;
     }
-    if(roll == 0){
+    if(roll == 1){
         immune = false;
         color = norm;
         movespeed = normSpeed;
+        player.hasafterimage = false;
     }
     // System.out.println("Rollnum: " + rollNum);
     // System.out.println("Roll: " + roll);

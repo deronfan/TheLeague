@@ -55,6 +55,7 @@ public void attackTwo(){
         movespeed = (int)(normSpeed*2);
         lastRageTime = currentTime;
         color = Color.black;
+        player.hasafterimage = true;
     }
 }
 
@@ -81,6 +82,7 @@ public void update(){
     if(rage == 0){
         player.gp.backgroundColor = Color.gray;
         player.gp.FPS = 45;
+        player.hasafterimage = false;
         attackDMG = normDMG;
         leechnum = normLeech;
         movespeed = normSpeed;

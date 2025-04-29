@@ -73,7 +73,7 @@ public class GamePanel extends JPanel implements Runnable {
         addCharacterButton("Vampire", Vampire1, Vampire2);
         addCharacterButton("Dark Knight", DarkKnight1, DarkKnight2);
         JButton Helpful = new JButton();
-        Helpful.setText("<html>Player One uses WASD to move and Q and E for Primary and Secondary Abilities respectively.<br>Player Two uses IJKL to move and U and O for Primary and Secondary Abilities respectively.<br>You can hover over the character's button for a brief description of their abilities.</html>");
+        Helpful.setText("<html>Player One uses WASD to move and Q and E for Primary and Secondary Abilities respectively.<br>Player Two uses IJKL to move and U and O for Primary and Secondary Abilities respectively.<br>Green healthpacks will randomly spawn that can be picked up by touching it.<br>You can hover over the character's button for a brief description of their abilities.</html>");
         this.add(Helpful);
         addCharacterButton("Rogue", Rogue1, Rogue2);
         addCharacterButton("Engineer", Engineer1, Engineer2);

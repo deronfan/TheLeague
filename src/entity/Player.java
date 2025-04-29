@@ -11,6 +11,13 @@ public class Player extends Entity{
     public Character c;
     public int pID;
     public boolean isAlive = true;
+    public boolean hasafterimage = false;
+    public int pastX;
+    public int pastY;
+    public int pastX2;
+    public int pastY2;
+    public int pastX3;
+    public int pastY3;
     public ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
     public Player(int x, int y, int speed, GamePanel gp, KeyHandler kh, int size, int pID){
         super(x, y, speed);
@@ -26,6 +33,12 @@ public class Player extends Entity{
         }
     }
     public void update(){
+        pastX3 = pastX2;
+        pastY3 = pastY2;
+        pastX2 = pastX;
+        pastY2 = pastY;
+        pastX = x;
+        pastY = y;
         if(speed != c.getMovespeed()){
             speed = c.getMovespeed();
         }
@@ -105,13 +118,15 @@ public class Player extends Entity{
     public void draw(Graphics2D g){
         if(isAlive==true){
         g.setColor(c.color);
-        g.setColor(c.color);
         g.fillRect(x, y, gp.tileSize, gp.tileSize);
         int rectWidth = gp.tileSize / 2; 
         int rectHeight = gp.tileSize / 2;
         int rectX = x;
         int rectY = y;
-
+        if (hasafterimage) {
+            g.setColor(new Color(c.color.getRed(), c.color.getGreen(), c.color.getBlue(), 100)); // Faint version of the player's color
+            g.fillRect(pastX3, pastY3, gp.tileSize, gp.tileSize);
+        }
         switch (direction) {
             case "up":
                 rectX = x + gp.tileSize / 4;
