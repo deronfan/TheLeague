@@ -23,7 +23,7 @@ public class Player extends Entity{
         super(x, y, speed);
         this.gp = gp;
         this.kh = kh;
-        this.size = size;
+        this.size = gp.tileSize;
         this.pID = pID;
         if(pID == 1){
             direction = "right";
@@ -212,7 +212,6 @@ public class Player extends Entity{
         projectiles.add(new Projectile(x, y, speed, direction, size, damage, color, lt, homing, target));
     }
     public void shoot(int damage, int size, int speed, Color color, int lt, boolean homing, Player target, int x, int y, boolean persistant) {
-        System.out.println("Check 4");
         projectiles.add(new Projectile(x, y, speed, "", size, damage, color, lt, homing, target, persistant));
     }
     public void melee(int x, int y, int damage, int vsize, int hsize, int speed, Color color, int lt) {
@@ -254,7 +253,7 @@ public class Player extends Entity{
                 friendlyFire = false;
             }
         }
-        return (Math.abs(x - projectile.x) < projectile.hsize && Math.abs(y - projectile.y) < projectile.size && friendlyFire);
+        return friendlyFire && ((this.x <= projectile.x + projectile.hsize && this.x >= projectile.x && this.y <= projectile.y + projectile.size && this.y >= projectile.y) || (this.x+size <= projectile.x + projectile.hsize && this.x+size >= projectile.x && this.y <= projectile.y + projectile.size && this.y >= projectile.y) || (this.x <= projectile.x + projectile.hsize && this.x >= projectile.x && this.y+size <= projectile.y + projectile.size && this.y+size >= projectile.y) || (this.x+size <= projectile.x + projectile.hsize && this.x+size >= projectile.x && this.y+size <= projectile.y + projectile.size && this.y+size >= projectile.y));
     }
     public void takeDamage(int damage) {
         if (c.takeDamage(damage) <= 0) {

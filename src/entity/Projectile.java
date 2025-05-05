@@ -13,6 +13,14 @@ public class Projectile extends Entity{
     public Player target;
     private int startlt;
     private int homespeed;
+    private int prevXDirection;
+    private int prevYDirection;
+    private int prevX2Direction;
+    private int prevY2Direction;
+    private int prevX3Direction;
+    private int prevY3Direction;
+    private int prevX4Direction;
+    private int prevY4Direction;
     public boolean persistant;
     public boolean hasOnDeath;
     public boolean rectangular;
@@ -127,8 +135,16 @@ public class Projectile extends Entity{
             homespeed += 2; 
             }
             double angle = Math.atan2(target.y - y, target.x - x);
-            x += homespeed * Math.cos(angle);
-            y += homespeed * Math.sin(angle);
+            prevX4Direction = prevX3Direction;
+            prevY4Direction = prevY3Direction;
+            prevX3Direction = prevX2Direction;
+            prevY3Direction = prevY2Direction;
+            prevX2Direction = prevXDirection;
+            prevY2Direction = prevYDirection;
+            prevXDirection = (int)(homespeed * Math.cos(angle));
+            prevYDirection = (int)(homespeed * Math.sin(angle));
+            x += prevX4Direction;
+            y += prevY4Direction;
             }
         }
         if(x > width-16){
@@ -161,6 +177,6 @@ public class Projectile extends Entity{
         if (this == other) {
             return false;
         }
-        return Math.abs(this.x - other.x) < this.size+8 && Math.abs(this.y - other.y) < this.hsize+8;
+        return this.x < other.x + other.size && this.x + this.size > other.x && this.y < other.y + other.hsize && this.y + this.hsize > other.y;
     }
 }

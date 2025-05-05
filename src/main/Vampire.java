@@ -52,7 +52,7 @@ public void attackTwo(){
         player.gp.setFPS(20);
         attackDMG = normDMG + rageBonus;
         leechnum = normLeech*2;
-        movespeed = (int)(normSpeed*2);
+        movespeed = 12;
         lastRageTime = currentTime;
         color = Color.black;
         player.hasafterimage = true;

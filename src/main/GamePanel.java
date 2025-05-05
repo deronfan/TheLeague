@@ -1,5 +1,6 @@
 package main;
 
+import entity.Particle;
 import entity.Player;
 import entity.Projectile;
 
@@ -32,6 +33,7 @@ public class GamePanel extends JPanel implements Runnable {
     int p2y = 250;
     int p2size = tileSize * 3;
     int p2speed = 4;
+    private ArrayList<Particle> particles = new ArrayList<>();
     JFrame frame;
     Character Tank1 = new Tank(4, 500, 500, "Tank", 45, Color.red, 0.5);
     Character Ranger1 = new Ranger(5, 200, 200, "Ranger", 20, Color.red);
@@ -40,6 +42,7 @@ public class GamePanel extends JPanel implements Runnable {
     Character Rogue1 = new Rogue(7, 150, 150, "Rogue", 10, Color.red, 3);
     Character Pyro1 = new Pyro(5, 300, 300, "Pyro", 50, Color.red);
     Character Engineer1 = new Engineer(5, 180, 180, "Engineer", 5, Color.red);
+    Character Speedster1 = new Speedster(10, 80, 80, "Speedster", 2, Color.red);
     Character Tank2 = new Tank(4, 500, 500, "Tank", 30, Color.blue, 0.5);
     Character Ranger2 = new Ranger(5, 200, 200, "Ranger", 20, Color.blue);
     Character Vampire2 = new Vampire(5, 180, 180, "Vampire", 15, Color.blue, 10);
@@ -47,6 +50,7 @@ public class GamePanel extends JPanel implements Runnable {
     Character Rogue2 = new Rogue(7, 150, 150, "Rogue", 10, Color.blue, 3);
     Character Engineer2 = new Engineer(5, 180, 180, "Engineer", 5, Color.blue);
     Character Pyro2 = new Pyro(5, 300, 300, "Pyro", 50, Color.blue);
+    Character Speedster2 = new Speedster(10, 80, 80, "Speedster", 2, Color.blue);
     public Player p1 = new Player(p1x, p1y, p1speed, this, con, p1size, 1);
     public Player p2 = new Player(p2x, p2y, p2speed, this, con, p2size, 2);
 
@@ -78,7 +82,7 @@ public class GamePanel extends JPanel implements Runnable {
         addCharacterButton("Rogue", Rogue1, Rogue2);
         addCharacterButton("Engineer", Engineer1, Engineer2);
         addCharacterButton("Pyro", Pyro1, Pyro2);
-        addCharacterButton("Coming Soon", Engineer1, Engineer2);
+        addCharacterButton("Speedster", Speedster1, Speedster2);
     }
 
     private void addCharacterButton(String name, Character player1Character, Character player2Character) {
@@ -126,10 +130,13 @@ public class GamePanel extends JPanel implements Runnable {
             button.setToolTipText("<html>Primary Ability: Dagger - Quickly throws a dagger that does chip damage and homes in on the enemy<br>Secondary Ability: Dodge Roll - Gain a burst of speed and become invulnerable for a short period of time</html>");
         }
         else if(player1Character == Engineer1 || player1Character == Engineer2){
-            button.setToolTipText("<html>Primary Ability: Tazer - Shoot a projectile that will apply stacks of stun on an enemy<br>Secondary Ability: Turret - Place a turret that will shoot in all cardinal directions<br>Stun - Once enough stacks are applied, the enemy will be stunned for a short period of time</html>");
+            button.setToolTipText("<html>Primary Ability: Tazer - Shoot a projectile that will apply stacks of stun on an enemy<br>Secondary Ability: Turret - Place a turret that shoots at the enemy<br>Stun - Once enough stacks are applied, the enemy will be stunned for a short period of time</html>");
         }
         else if(player1Character == Pyro1 || player1Character == Pyro2){
             button.setToolTipText("<html>Primary Ability: Flame Thrower - Shoot a stream that deals chip damage<br>Secondary Ability: Flame Pool - Charge up for a second and release a pool of fire</html>");
+        }
+        else if(player1Character == Speedster1 || player1Character == Speedster2){
+            button.setToolTipText("<html>Primary Ability: Lightning Bolt - Shoot a quick homing bolt that does small damage over time<br>Secondary Ability: Rush - Go really fast<br>Passive: Ram: Whenever you run into someone, they take damage</html>");
         }
         this.add(button);
     }
@@ -171,7 +178,13 @@ public class GamePanel extends JPanel implements Runnable {
             projectile.update();
             if (p1.checkProjectileCollision(projectile)) {
                 p1.takeDamage(projectile.atkD);
-                projectilesToRemove.add(projectile);
+                if (!projectile.persistant) {
+                    projectilesToRemove.add(projectile);
+                }
+                if (projectile.atkD > 0) {
+                    p2.c.shotsHit++;
+                    createParticles(p1.x + tileSize / 2, p1.y + tileSize / 2, p1.c.color);
+                }
             }
             else if (p2.checkProjectileCollision(projectile)) {
                 p2.takeDamage(projectile.atkD);
@@ -180,6 +193,7 @@ public class GamePanel extends JPanel implements Runnable {
                 }
                 if(projectile.atkD > 0){
                     p1.c.shotsHit++;
+                    createParticles(p2.x + tileSize / 2, p2.y + tileSize / 2, p2.c.color);
                     int seed = (int)(Math.random()*20);
                     if(seed == 0){
                         frame.setTitle("Player 1's aim is insane!");
@@ -219,6 +233,7 @@ public class GamePanel extends JPanel implements Runnable {
                 }
                 if(projectile.atkD > 0){
                     p2.c.shotsHit++;
+                    createParticles(p1.x + tileSize / 2, p1.y + tileSize / 2, p1.c.color);
                     int seed = (int)(Math.random()*20);
                     if(seed == 0){
                         frame.setTitle("Player 2 with the sick shot!");
@@ -256,6 +271,14 @@ public class GamePanel extends JPanel implements Runnable {
         }
         p1.c.update();
         p2.c.update();
+        ArrayList<Particle> particlesToRemove = new ArrayList<>();
+        for (Particle particle : particles) {
+            particle.update();
+            if (particle.lifetime <= 0) {
+                particlesToRemove.add(particle);
+        }
+}
+particles.removeAll(particlesToRemove);
         }
         if (p1.c.getHP() <= 0 && p2.c.getHP() <= 0) {
             frame.setTitle("and this is a tie!");
@@ -374,6 +397,9 @@ public class GamePanel extends JPanel implements Runnable {
             p1g.drawString("P2 HP: " + p2.c.getHP() + "/" + p2.c.getMaxHP(), 800, height - 40);
             p1g.dispose();
             p2g.dispose();
+            for (Particle particle : particles) {
+                particle.draw((Graphics2D) g);
+            }
 
         }
     }
@@ -393,5 +419,14 @@ public class GamePanel extends JPanel implements Runnable {
     }
     public void setFPS(int FPS) {
         this.FPS = FPS;
+    }
+    private void createParticles(int x, int y, Color color) {
+        for (int i = 0; i < 10; i++) { 
+            int dx = (int) (Math.random() * 6 - 3); // Random x direction
+            int dy = (int) (Math.random() * 6 - 3); // Random y direction
+            int size = (int) (Math.random() * 4 + 2); 
+            int lifetime = (int) (Math.random() * 20 + 10);
+            particles.add(new Particle(x, y, dx, dy, size, lifetime, color));
+        }
     }
 }
