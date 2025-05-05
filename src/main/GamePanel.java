@@ -383,6 +383,9 @@ particles.removeAll(particlesToRemove);
         } else if (characterSelectionComplete) {
             Graphics2D p1g = (Graphics2D) g;
             Graphics2D p2g = (Graphics2D) g;
+            for (Particle particle : particles) {
+                particle.draw((Graphics2D) g);
+            }
             for (Projectile projectile : p1.projectiles) {
                 projectile.draw(p1g);
             }
@@ -397,9 +400,6 @@ particles.removeAll(particlesToRemove);
             p1g.drawString("P2 HP: " + p2.c.getHP() + "/" + p2.c.getMaxHP(), 800, height - 40);
             p1g.dispose();
             p2g.dispose();
-            for (Particle particle : particles) {
-                particle.draw((Graphics2D) g);
-            }
 
         }
     }
@@ -426,7 +426,7 @@ particles.removeAll(particlesToRemove);
             int dy = (int) (Math.random() * 6 - 3); // Random y direction
             int size = (int) (Math.random() * 4 + 2); 
             int lifetime = (int) (Math.random() * 20 + 10);
-            particles.add(new Particle(x, y, dx, dy, size, lifetime, color));
+            particles.add(new Particle(x, y, dx, dy, size, lifetime, new Color(color.getRed(), color.getGreen(), color.getBlue(), 50)));
         }
     }
 }
