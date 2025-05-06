@@ -20,6 +20,7 @@ public Engineer(int movespeed, int maxHP, int HP, String name, int attackDMG, Co
     this.turretCooldown = 20000;
     this.lastTurret = 0;
     turretLS = 900;
+    stunAmount = 30;
 }
 public void attackOne(){ //taser
     long currentTime = System.currentTimeMillis();
@@ -44,8 +45,8 @@ public void attackTwo(){ //turret
     }
 }
 public void update(){
+    stunnedCheck();
     if(hitsProcessed < shotsHit){
-        hitsProcessed++;
         if(hitsProcessed%4 == 0){
             if(player.pID == 1){
                 player.gp.p2.c.stun();
@@ -54,8 +55,8 @@ public void update(){
                 player.gp.p1.c.stun();
             }
         }
+        hitsProcessed++;
     }
-    // System.out.println("hitsProcessed: " + hitsProcessed);
     if(turretLT == turretLS){
         if(player.pID == 1){
             player.shoot(10, player.gp.tileSize*3, 0, Color.orange, turretLS, false, player.gp.p2, turretX-player.gp.tileSize, turretY-player.gp.tileSize, true);

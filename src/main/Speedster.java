@@ -22,6 +22,7 @@ public Speedster(int movespeed, int maxHP, int HP, String name, int attackDMG, C
     normDMG = attackDMG;
     norm = color;
     normSpeed = movespeed;
+    stunAmount = 70;
 }
 
 public int takeDamage(int damage){

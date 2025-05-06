@@ -19,7 +19,7 @@ public Rogue(int movespeed, int maxHP, int HP, String name, int attackDMG, Color
     immune = false;
     this.rollCooldown = 300;
     this.lastShootTime = 0;
-    this.shootCooldown = 300;
+    this.shootCooldown = 100;
     maxRollNum = rollNum;
     normSpeed = movespeed;
     norm = color;
@@ -38,10 +38,10 @@ public void attackOne(){ //dagger throw
     long currentTime = System.currentTimeMillis();
     if (currentTime - lastShootTime >= shootCooldown) {
         if(player.pID == 1){
-            player.shoot(attackDMG*3, player.gp.tileSize, 6, Color.darkGray, 10, true, player.gp.p2);
+            player.shoot(attackDMG*3, player.gp.tileSize, 6, Color.darkGray, 18, true, player.gp.p2);
         }
         if(player.pID == 2){
-            player.shoot(attackDMG*3, player.gp.tileSize, 6, Color.lightGray, 10, true, player.gp.p1);
+            player.shoot(attackDMG*3, player.gp.tileSize, 6, Color.lightGray, 18, true, player.gp.p1);
         }
         shotsAmount++;
         lastShootTime = currentTime;

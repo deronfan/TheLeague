@@ -35,7 +35,7 @@ public class GamePanel extends JPanel implements Runnable {
     int p2speed = 4;
     private ArrayList<Particle> particles = new ArrayList<>();
     JFrame frame;
-    Character Tank1 = new Tank(4, 500, 500, "Tank", 45, Color.red, 0.5);
+    Character Tank1 = new Tank(4, 400, 400, "Tank", 45, Color.red, 0.5);
     Character Ranger1 = new Ranger(5, 200, 200, "Ranger", 20, Color.red);
     Character Vampire1 = new Vampire(5, 180, 180, "Vampire", 15, Color.red, 10);
     Character DarkKnight1 = new NightKnight(5, 300, 300, "Dark Knight", 40, Color.red);
@@ -43,7 +43,7 @@ public class GamePanel extends JPanel implements Runnable {
     Character Pyro1 = new Pyro(5, 300, 300, "Pyro", 50, Color.red);
     Character Engineer1 = new Engineer(5, 180, 180, "Engineer", 5, Color.red);
     Character Speedster1 = new Speedster(10, 80, 80, "Speedster", 2, Color.red);
-    Character Tank2 = new Tank(4, 500, 500, "Tank", 30, Color.blue, 0.5);
+    Character Tank2 = new Tank(4, 400, 400, "Tank", 30, Color.blue, 0.5);
     Character Ranger2 = new Ranger(5, 200, 200, "Ranger", 20, Color.blue);
     Character Vampire2 = new Vampire(5, 180, 180, "Vampire", 15, Color.blue, 10);
     Character DarkKnight2 = new NightKnight(5, 300, 300, "Dark Knight", 40, Color.blue);
@@ -136,7 +136,7 @@ public class GamePanel extends JPanel implements Runnable {
             button.setToolTipText("<html>Primary Ability: Flame Thrower - Shoot a stream that deals chip damage<br>Secondary Ability: Flame Pool - Charge up for a second and release a pool of fire</html>");
         }
         else if(player1Character == Speedster1 || player1Character == Speedster2){
-            button.setToolTipText("<html>Primary Ability: Lightning Bolt - Shoot a quick homing bolt that does small damage over time<br>Secondary Ability: Rush - Go really fast<br>Passive: Ram: Whenever you run into someone, they take damage</html>");
+            button.setToolTipText("<html>Primary Ability: Lightning Bolt - Shoot a quick homing bolt that does small damage over time<br>Secondary Ability: Rush - Go really fast<br>Passive: Ram - Whenever you run into someone, they take damage</html>");
         }
         this.add(button);
     }
@@ -422,11 +422,11 @@ particles.removeAll(particlesToRemove);
     }
     private void createParticles(int x, int y, Color color) {
         for (int i = 0; i < 10; i++) { 
-            int dx = (int) (Math.random() * 6 - 3); // Random x direction
-            int dy = (int) (Math.random() * 6 - 3); // Random y direction
-            int size = (int) (Math.random() * 4 + 2); 
-            int lifetime = (int) (Math.random() * 20 + 10);
-            particles.add(new Particle(x, y, dx, dy, size, lifetime, new Color(color.getRed(), color.getGreen(), color.getBlue(), 50)));
+            int dx = (int) (Math.random() * 7 - 3.5); // Random x direction
+            int dy = (int) (Math.random() * 7 - 3.5); // Random y direction
+            int size = (int) (Math.random() * 6 + 4); 
+            int lifetime = (int) (Math.random() * 40 + 30);
+            particles.add(new Particle(x, y, dx, dy, size, lifetime, new Color(color.getRed(), color.getGreen(), color.getBlue(),200)));
         }
     }
 }

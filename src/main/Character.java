@@ -85,9 +85,6 @@ public void stunnedCheck(){
 public void stun(){
     isStunned = true;
     stunTime = stunAmount;
-}
-public void stun(int x){
-    isStunned = true;
-    stunTime = x;
+    System.out.println("Stunned");
 }
 }

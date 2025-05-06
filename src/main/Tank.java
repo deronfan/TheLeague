@@ -65,10 +65,16 @@ public void attackTwo(){ //Block
 
 public void update(){
     stunnedCheck();
-    if(block > 0){
+    if((player.pID ==  1 && (player.kh.adownPressed || player.kh.aupPressed || player.kh.aleftPressed || player.kh.arightPressed)) || (player.pID == 2 && (player.kh.bdownPressed || player.kh.bleftPressed || player.kh.brightPressed || player.kh.bupPressed))){
+        defense = 1;
+    }
+    else{
+        defense = 0.5;
+    }
+    if(block > -1){
         block--;
     }
-    if(block <= 0){
+    if(block == 0){
         isBlocking = false;
         color = norm;
     }

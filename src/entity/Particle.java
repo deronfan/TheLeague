@@ -22,6 +22,11 @@ public class Particle {
         x += dx;
         y += dy;
         lifetime--;
+        if (lifetime%10 == 0) {
+            dx *= 0.8; 
+            dy *= 0.8; 
+            color = new Color(color.getRed(), color.getGreen(), color.getBlue(), (int)(color.getAlpha() * 0.5));
+        }
     }
 
     public void draw(Graphics2D g) {
