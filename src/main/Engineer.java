@@ -4,7 +4,6 @@ import java.awt.Color;
 public class Engineer extends Character{
 private long lastShootTime;
 private long shootCooldown;
-private int shots;
 private long lastTurret;
 private long turretCooldown;
 private int hitsProcessed;

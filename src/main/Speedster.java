@@ -6,13 +6,11 @@ public class Speedster extends Character{
     private int rageBonus;
     private long lastBoltTime;
     private long boltCooldown;
-    private int hitsProcessed;
     private int rage;
     private Color norm;
     private int normSpeed;
     private long lastRageTime;
     private long rageCooldown;
-    private int tick;
 
 public Speedster(int movespeed, int maxHP, int HP, String name, int attackDMG, Color color){
     super(movespeed, maxHP, HP, name, attackDMG, color);
@@ -80,7 +78,6 @@ public void update(){
         }
     }
     stunnedCheck();
-    tick++;
     if(rage > -1){
         rage--;
     }

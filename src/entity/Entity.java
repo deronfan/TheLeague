@@ -16,5 +16,6 @@ public class Entity{
     }
     public void update(){
         System.out.println("Entity Update");
+        //IF THIS IS CALLED THEN SOMETHING IS WRONG
     }
 }
